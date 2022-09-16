@@ -1,6 +1,7 @@
 
 import 'dart:io';
 import 'package:daa/models/sub_modules_model.dart';
+import 'package:daa/screens/ModuleDetail.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/gestures.dart';
@@ -255,12 +256,15 @@ class SubCourseState extends State<Subcourses> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: ()  {
-                      if(moduleList![position].mobilevr.toString().isNotEmpty && moduleList![position].mobilevr != null) {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext context) => ModuleDetail(moduleList![position].content.toString(),
+                              moduleList![position].title.toString(),moduleList![position].mobilevr.toString(),moduleList![position].ar.toString(),imageUrl)));
+                     /* if(moduleList![position].mobilevr.toString().isNotEmpty && moduleList![position].mobilevr != null) {
                         checkForDownload = false;
                         downloadDialog(
                             moduleList![position].mobilevr.toString(),
                             position);
-                      }
+                      }*/
                     },
                     child: SizedBox(
                       height: 120,

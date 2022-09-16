@@ -2,9 +2,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:daa/common/Customstrings.dart';
 import 'package:daa/screens/Forgotpass.dart';
+import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:open_file_plus/open_file_plus.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
@@ -13,20 +17,170 @@ import '../common/Common.dart';
 import 'Dashboard.dart';
 
 class ModuleDetail extends StatefulWidget {
-  var title = "";
-  ModuleDetail(this.title);
+  var content = "",title = "",mobileVr = "",mobileAr = "",baseUrl = "";
+  ModuleDetail(this.content,this.title,this.mobileVr,this.mobileAr,this.baseUrl);
 
   @override
   ModuleState createState() => ModuleState();
 }
 
 class ModuleState extends State<ModuleDetail> {
-
+  var percent = 0,checkForDownload = false;
 
   @override
   void initState() {
     super.initState();
 
+  }
+
+  downloadDialog(String apkName) {
+    percent = 0;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (context, setState) {
+                return AlertDialog(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  contentPadding: EdgeInsets.only(top: 10.0),
+                  content: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children:  <Widget>[
+                          Text(
+                            Customstrings.download_file,
+                            style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Common.colorAccent),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                        height: 4.0,
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                        child: Text(
+                          apkName,
+                          style: const TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.normal,
+                              color: Common.colorAccent),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+
+                      CircularPercentIndicator(
+                        radius: 80.0,
+                        lineWidth: 10.0,
+                        percent: percent/100,
+                        center: Text(
+                          "$percent%",
+                          style: const TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
+                        ),
+                        backgroundColor: Common.list_divider,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: Common.colorAccent,
+                      ),
+                      const SizedBox(
+                        height: 50.0,
+                      ),
+                      InkWell(
+                        child: Container(
+                            decoration: const BoxDecoration(
+                              color: Common.colorAccent,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(10.0),
+                                  bottomRight: Radius.circular(10.0)),
+                            ),
+                            child: TextButton(
+                              onPressed: () async {
+                                var status1 = await Permission.manageExternalStorage.status;
+                                if(!status1.isGranted){
+                                  await Permission.manageExternalStorage.request();
+                                }
+                                if(!checkForDownload && status1.isGranted) {
+
+                                  if (apkName
+                                      .isNotEmpty &&
+                                     apkName != null) {
+
+                                    checkForDownload = true;
+                                    var dir =
+                                    await DownloadsPathProvider.downloadsDirectory;
+                                    if (dir != null) {
+                                      String savename = apkName;
+                                      String savePath = "${dir.path}/$savename";
+                                      print(savePath);
+                                      //output:  /storage/emulated/0/Download/banner.png
+
+                                      try {
+                                        await Dio().download(
+                                            "${widget.baseUrl}/$apkName",
+                                            savePath,
+                                            onReceiveProgress: (received, total) {
+                                              if (total != -1) {
+                                                print("${(received / total * 100)
+                                                    .toStringAsFixed(0)}%");
+                                                var percentValue = (received /
+                                                    total * 100)
+                                                    .toStringAsFixed(0);
+
+                                                setState(() {
+                                                  percent = int.parse(percentValue);
+                                                  print(
+                                                      "percentvalue is == $percent");
+                                                });
+                                                //you can build progressbar feature too
+                                              }
+                                            });
+
+
+                                        OpenFile.open(savePath);
+                                        print("File is saved to download folder.");
+                                        Navigator.of(context).pop();
+                                      } on DioError catch (e) {
+                                        print(e.message);
+                                      }
+                                    }
+
+                                  }
+                                }
+                              },
+                              child: const Text(
+                                'Download',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                      ),
+                    ],
+                  ),
+                );
+              });
+        });
   }
 
   @override
@@ -107,9 +261,9 @@ class ModuleState extends State<ModuleDetail> {
               ),
               Container(
                 margin: const EdgeInsets.all(20),
-                child:  const Text(
-                  "Marshalling is one-on-one visual communication and a part of aircraft ground handling. It may be as an alternative to, or additional to, radio communications between the aircraft and air traffic control. The usual equipment of a marshaller is a reflecting safety vest, a helmet with acoustic earmuffs, and gloves or marshalling wands–handheld illuminated beacons.In this module the users will learn marshalling signals in an interactive and immersive simulation, in this user-friendly simulation the user will train for marshalling in training mode and the users will also have access to evaluation mode where they can test their skills and receive reports based on their performance.After completing this module, the user will be able to perform marshalling signals.",
-                  style: TextStyle(
+                child:   Text(
+                 widget.content,
+                  style: const TextStyle(
                       color: Common.txtColor,
                       fontFamily: 'PoppinRegular'),
                 ),
@@ -134,7 +288,12 @@ class ModuleState extends State<ModuleDetail> {
                         child: TextButton.icon(
                           // <-- TextButton
                           onPressed: () {
-
+                            if(widget.mobileVr.isNotEmpty && widget.mobileVr != "null") {
+                              checkForDownload = false;
+                              downloadDialog(widget.mobileVr);
+                            }else{
+                              Common.showToast("Mobile VR is not avaialble.", "red");
+                            }
                           },
                           icon: const Icon(
                             Icons.supervised_user_circle,
@@ -160,7 +319,12 @@ class ModuleState extends State<ModuleDetail> {
                         child: TextButton.icon(
                           // <-- TextButton
                           onPressed: () {
-
+                            if(widget.mobileVr.isNotEmpty && widget.mobileAr != "null") {
+                              checkForDownload = false;
+                              downloadDialog(widget.mobileAr);
+                            }else{
+                              Common.showToast("Mobile AR is not avaialble.", "red");
+                            }
                           },
                           icon: const Icon(
                             Icons.send_to_mobile_outlined,

@@ -36,6 +36,6 @@ class myApp extends StatelessWidget {
 
           ),
         ),
-        home: Scaffold(body: ModuleDetail("")));
+        home: Scaffold(body: Splash()));
   }
 }

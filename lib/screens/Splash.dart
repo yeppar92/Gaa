@@ -34,21 +34,22 @@ class _SplashState extends State<Splash>{
 
   checkForPref() async {
     
-    if (Platform.isAndroid)
+    if (Platform.isAndroid) {
       deviceType = "Android";
-    else if (Platform.isIOS)
+    } else if (Platform.isIOS) {
       deviceType = "Ios";
+    }
 
     String checkLogin = await Common.getPreferences("login");
     Timer(
-        Duration(seconds: 3),
+        const Duration(seconds: 5),
             () {
           if (checkLogin == "true") {
              Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => Dashboard()));
+            builder: (BuildContext context) => const Dashboard()));
           } else {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) => Login1()));
+                builder: (BuildContext context) => const Login1()));
           }
         }
     );
@@ -64,7 +65,7 @@ class _SplashState extends State<Splash>{
  @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
+        value: const SystemUiOverlayStyle(
           statusBarColor: Common.colorAccent,
           statusBarIconBrightness: Brightness.light,
         ),
@@ -81,14 +82,20 @@ class _SplashState extends State<Splash>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset("assets/images/splashlogo.png"),
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
                       Image.asset(
                           'assets/images/gaalogotext.png'),
-                  SizedBox(height: 10,),
-                 
 
-                      Padding(
-                        padding: EdgeInsets.all(15.0),
+
+                      const SizedBox(height: 10,),
+                      Image.asset(
+                          'assets/images/logogif.gif',
+                          height: 120,
+                          width: 120,
+                      ),
+
+                     /* Padding(
+                        padding: const EdgeInsets.all(15.0),
                         child: LinearPercentIndicator(
                           width: MediaQuery.of(context).size.width - 50,
                           animation: true,
@@ -100,7 +107,7 @@ class _SplashState extends State<Splash>{
                           progressColor: Colors.white,
                         ),
                       ),
-
+*/
                  /* Container(
                     width: 110,
                     height: 110,
