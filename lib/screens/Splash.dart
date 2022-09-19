@@ -22,7 +22,7 @@ class _SplashState extends State<Splash>{
  var deviceType = "";
  late bool _loading;
  late double _progressValue;
-
+ StreamController<bool> streamController = StreamController<bool>();
  @override
   void initState() {
     super.initState();
@@ -46,7 +46,7 @@ class _SplashState extends State<Splash>{
             () {
           if (checkLogin == "true") {
              Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => const Dashboard()));
+            builder: (BuildContext context) => Dashboard(streamController,streamController.stream)));
           } else {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => const Login1()));

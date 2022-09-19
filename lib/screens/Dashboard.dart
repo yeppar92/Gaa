@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:daa/common/Common.dart';
@@ -5,35 +6,61 @@ import 'package:daa/common/Customstrings.dart';
 import 'package:daa/screens/Subcourses.dart';
 import 'package:flutter/material.dart';
 
+import '../common/ApiServices.dart';
+import '../models/sub_modules_model.dart';
+import 'ModuleDetail.dart';
 
+var courseVisible = true,
+    subCourseVisible = false,
+    AuthToken = "",
+ tabTitle = Customstrings.courses;
+StreamController<bool> streamController = StreamController<bool>();
+StreamController<bool> streamController1 = StreamController<bool>();
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  final Stream<bool>stream;
+  final StreamController<bool> srController;
+  Dashboard(this.srController,this.stream);
 
   @override
   DashState createState() => DashState();
 }
 
-class DashState extends State<Dashboard>  {
-
+class DashState extends State<Dashboard> {
   var pageIndex = 0;
-  final pages = [
-    const HomeWork(),
-    const HomeWork(),
-    const HomeWork(),
+  var checkForBack = false;
 
+  final pages = [
+     HomeWork(streamController1.stream),
+     HomeWork(streamController1.stream),
+     HomeWork(streamController1.stream),
   ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    streamController = widget.srController;
+    widget.stream.listen((event) {
+      checkBack(event);
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkForPref();
+    });
 
-    checkForPref();
   }
 
+  checkForPref() async {
+    String token = await Common.getPreferences("token");
+    AuthToken = token;
+  }
 
+  void checkBack(bool checkBack) {
+       print("call back called>>>>>>>");
+       setState((){
+         checkForBack = checkBack;
+       });
 
-  checkForPref() async {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,34 +70,55 @@ class DashState extends State<Dashboard>  {
         color: Common.colorAccent,
         child: DefaultTabController(
             length: 2,
-            child: Scaffold(
-              extendBody: true,
-              appBar: AppBar(
-                backgroundColor: Common.colorAccent,
-                /* leading: IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),*/
-                actions: <Widget>[
-                  IconButton(
-                    icon: Image.asset(
-                      "assets/images/proicon.png",
-                      width: 30,
-                      height: 30,
-                    ),
-                    onPressed: () {
-                      // do something
-                    },
-                  )
-                ],
-                title: Image.asset('assets/images/splashlogo.png',
-                height: 50,
-                  width: 50,
-                ),
-                centerTitle: true,
+            child:  WillPopScope(
+        onWillPop: () async {
+          if (checkForBack) {
+            print("call back button>>>>>>>");
+            setState(() {
+              checkForBack = false;
+              streamController1.add(true);
 
-              ),
-              body: pages[pageIndex],
+            });
+          }
+      return false;
+    },
+            child : Scaffold(
+                extendBody: true,
+                appBar: AppBar(
+                  backgroundColor: Common.colorAccent,
+                  leading: IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () {
+                        //Navigator.of(context).pop();
+                        if (checkForBack) {
+                          print("call back button>>>>>>>");
+                          setState(() {
+                            checkForBack = false;
+                            streamController1.add(true);
+
+                          });
+                        }
+                      }),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Image.asset(
+                        "assets/images/proicon.png",
+                        width: 30,
+                        height: 30,
+                      ),
+                      onPressed: () {
+                        // do something
+                      },
+                    )
+                  ],
+                  title: Image.asset(
+                    'assets/images/splashlogo.png',
+                    height: 50,
+                    width: 50,
+                  ),
+                  centerTitle: true,
+                ),
+                body: pages[pageIndex],
                 bottomNavigationBar: Container(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
@@ -97,7 +145,6 @@ class DashState extends State<Dashboard>  {
                             selectedLabelStyle: textTheme.caption,
                             unselectedLabelStyle: textTheme.caption,
                             onTap: (value) {
-
                               setState(() {
                                 pageIndex = value;
                               });
@@ -116,32 +163,38 @@ class DashState extends State<Dashboard>  {
                                 ),
                               ),
                               BottomNavigationBarItem(
-                                label:Customstrings.profile,
+                                label: Customstrings.profile,
                                 icon: ImageIcon(
                                   AssetImage("assets/images/usericon.png"),
                                 ),
                               ),
-
-                            ])))
-            )));
+                            ]))))
+            )
+        ));
   }
 }
 
 class HomeWork extends StatefulWidget {
-  const HomeWork({Key? key}) : super(key: key);
+  final Stream<bool>stream;
+  HomeWork(this.stream);
 
   @override
   HomeState createState() => HomeState();
 }
 
-class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
-
+class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  var baseUrl = "";
+  List<Data>? moduleList;
 
   @override
   void initState() {
     super.initState();
+    widget.stream.listen((event) {
+      checkVisible();
+    });
     _tabController = TabController(length: 2, vsync: this);
+
   }
 
   @override
@@ -150,6 +203,37 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
     super.dispose();
   }
 
+  void checkVisible() {
+    print("call visible function");
+    setState(() {
+      courseVisible = true;
+      subCourseVisible = false;
+      tabTitle = Customstrings.courses;
+    });
+  }
+
+
+  callModulesApi() {
+    Common.showLoaderDialog(context);
+    final service = ApiServices();
+    service.getModules(AuthToken).then((value) {
+      Navigator.pop(context);
+      print("status is = ${value.status}");
+      if (value.status.toString() == "true") {
+        setState(() {
+          baseUrl = value.baseUrl.toString();
+          moduleList = value.data;
+          courseVisible = false;
+          subCourseVisible = true;
+          tabTitle = Customstrings.grtraining;
+          streamController.add(true);
+
+        });
+      } else {
+        Common.showToast("something went wrong", "red");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,58 +241,63 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
         extendBody: true,
         appBar: AppBar(
           toolbarHeight: 0,
-        centerTitle: true,
-        titleSpacing: 0,
-        automaticallyImplyLeading: false,
+          centerTitle: true,
+          titleSpacing: 0,
+          automaticallyImplyLeading: false,
           backgroundColor: Common.colorAccent,
-        elevation: 0.0,
+          elevation: 0.0,
+
           bottom: TabBar(
             controller: _tabController,
             labelPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-            tabs: const [
+            tabs: [
               Tab(
-                text: Customstrings.courses,
+                text: tabTitle,
               ),
               Tab(
                 text: Customstrings.dashboard,
               ),
             ],
           ),
-      ),
+        ),
         extendBodyBehindAppBar: true,
-        body:  TabBarView(
+        body: TabBarView(
           controller: _tabController,
           children: [
             Container(
                 color: Common.colorAccent,
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
-                  Expanded(
-                      child: GridView(
-                          gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 5),
-                          children: [
-                            InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) => Subcourses(Customstrings.grtraining)));
-                                },
-                                child : SizedBox(
-                                  height: 120,
-                                  width: double.infinity,
-                                  child:  Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      elevation: 5,
-                                      child: Stack(
-                                          children: [
+                    Visibility(
+                        visible: courseVisible,
+                     child : Flexible(
+                    child: GridView(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 5,
+                                      crossAxisSpacing: 5),
+                              children: [
+                                InkWell(
+                                    onTap: () {
+                                      callModulesApi();
+                                      /* Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) => Subcourses(Customstrings.grtraining)));*/
+                                    },
+                                    child: SizedBox(
+                                      height: 120,
+                                      width: double.infinity,
+                                      child: Card(
+                                          color: Colors.white,
+                                          semanticContainer: true,
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          elevation: 5,
+                                          child: Stack(children: [
                                             Image.asset(
                                               'assets/images/rectone.png',
                                               height: double.infinity,
@@ -217,33 +306,34 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
                                             ),
                                             Align(
                                               alignment: Alignment.bottomCenter,
-                                              child:  Container(
+                                              child: Container(
                                                 alignment: Alignment.center,
-                                                color: Colors.black.withOpacity(.30),
+                                                color: Colors.black
+                                                    .withOpacity(.30),
                                                 height: 30,
                                                 width: double.infinity,
-                                                child: Text(Customstrings.grtraining,style: const TextStyle(color: Colors.white),),
+                                                child: Text(
+                                                  Customstrings.grtraining,
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                ),
                                               ),
                                             )
-
-                                          ]
-
-
-                                      )),
-                                )),
-                            SizedBox(
-                              height: 120,
-                              width: double.infinity,
-                              child:  Card(
-                                  color: Colors.white,
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  elevation: 5,
-                                  child: Stack(
-                                      children: [
+                                          ])),
+                                    )),
+                                SizedBox(
+                                  height: 120,
+                                  width: double.infinity,
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Stack(children: [
                                         Image.asset(
                                           'assets/images/recttwo.png',
                                           height: double.infinity,
@@ -252,33 +342,34 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
                                         ),
                                         Align(
                                           alignment: Alignment.bottomCenter,
-                                          child:  Container(
+                                          child: Container(
                                             alignment: Alignment.center,
-                                            color: Colors.black.withOpacity(.30),
+                                            color:
+                                                Colors.black.withOpacity(.30),
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Text(Customstrings.comingsoon,style: const TextStyle(color: Colors.white),),
+                                            child: Text(
+                                              Customstrings.comingsoon,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         )
-
-                                      ]
-
-
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 120,
-                              width: double.infinity,
-                              child:  Card(
-                                  color: Colors.white,
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  elevation: 5,
-                                  child: Stack(
-                                      children: [
+                                      ])),
+                                ),
+                                SizedBox(
+                                  height: 120,
+                                  width: double.infinity,
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Stack(children: [
                                         Image.asset(
                                           'assets/images/rectthree.png',
                                           height: double.infinity,
@@ -287,33 +378,34 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
                                         ),
                                         Align(
                                           alignment: Alignment.bottomCenter,
-                                          child:  Container(
+                                          child: Container(
                                             alignment: Alignment.center,
-                                            color: Colors.black.withOpacity(.30),
+                                            color:
+                                                Colors.black.withOpacity(.30),
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Text(Customstrings.comingsoon,style: const TextStyle(color: Colors.white),),
+                                            child: Text(
+                                              Customstrings.comingsoon,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         )
-
-                                      ]
-
-
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 120,
-                              width: double.infinity,
-                              child:  Card(
-                                  color: Colors.white,
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  elevation: 5,
-                                  child: Stack(
-                                      children: [
+                                      ])),
+                                ),
+                                SizedBox(
+                                  height: 120,
+                                  width: double.infinity,
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Stack(children: [
                                         Image.asset(
                                           'assets/images/rectfour.png',
                                           height: double.infinity,
@@ -322,33 +414,34 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
                                         ),
                                         Align(
                                           alignment: Alignment.bottomCenter,
-                                          child:  Container(
+                                          child: Container(
                                             alignment: Alignment.center,
-                                            color: Colors.black.withOpacity(.30),
+                                            color:
+                                                Colors.black.withOpacity(.30),
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Text(Customstrings.comingsoon,style: const TextStyle(color: Colors.white),),
+                                            child: Text(
+                                              Customstrings.comingsoon,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         )
-
-                                      ]
-
-
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 120,
-                              width: double.infinity,
-                              child:  Card(
-                                  color: Colors.white,
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  elevation: 5,
-                                  child: Stack(
-                                      children: [
+                                      ])),
+                                ),
+                                SizedBox(
+                                  height: 120,
+                                  width: double.infinity,
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Stack(children: [
                                         Image.asset(
                                           'assets/images/rectfive.png',
                                           height: double.infinity,
@@ -357,33 +450,34 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
                                         ),
                                         Align(
                                           alignment: Alignment.bottomCenter,
-                                          child:  Container(
+                                          child: Container(
                                             alignment: Alignment.center,
-                                            color: Colors.black.withOpacity(.30),
+                                            color:
+                                                Colors.black.withOpacity(.30),
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Text(Customstrings.comingsoon,style: const TextStyle(color: Colors.white),),
+                                            child: Text(
+                                              Customstrings.comingsoon,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         )
-
-                                      ]
-
-
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 120,
-                              width: double.infinity,
-                              child:  Card(
-                                  color: Colors.white,
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  elevation: 5,
-                                  child: Stack(
-                                      children: [
+                                      ])),
+                                ),
+                                SizedBox(
+                                  height: 120,
+                                  width: double.infinity,
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Stack(children: [
                                         Image.asset(
                                           'assets/images/rectsix.png',
                                           height: double.infinity,
@@ -392,33 +486,34 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
                                         ),
                                         Align(
                                           alignment: Alignment.bottomCenter,
-                                          child:  Container(
+                                          child: Container(
                                             alignment: Alignment.center,
-                                            color: Colors.black.withOpacity(.30),
+                                            color:
+                                                Colors.black.withOpacity(.30),
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Text(Customstrings.comingsoon,style: const TextStyle(color: Colors.white),),
+                                            child: Text(
+                                              Customstrings.comingsoon,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         )
-
-                                      ]
-
-
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 120,
-                              width: double.infinity,
-                              child:  Card(
-                                  color: Colors.white,
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  elevation: 5,
-                                  child: Stack(
-                                      children: [
+                                      ])),
+                                ),
+                                SizedBox(
+                                  height: 120,
+                                  width: double.infinity,
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Stack(children: [
                                         Image.asset(
                                           'assets/images/recttwo.png',
                                           height: double.infinity,
@@ -427,33 +522,34 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
                                         ),
                                         Align(
                                           alignment: Alignment.bottomCenter,
-                                          child:  Container(
+                                          child: Container(
                                             alignment: Alignment.center,
-                                            color: Colors.black.withOpacity(.30),
+                                            color:
+                                                Colors.black.withOpacity(.30),
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Text(Customstrings.comingsoon,style: const TextStyle(color: Colors.white),),
+                                            child: Text(
+                                              Customstrings.comingsoon,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         )
-
-                                      ]
-
-
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 120,
-                              width: double.infinity,
-                              child:  Card(
-                                  color: Colors.white,
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  elevation: 5,
-                                  child: Stack(
-                                      children: [
+                                      ])),
+                                ),
+                                SizedBox(
+                                  height: 120,
+                                  width: double.infinity,
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      child: Stack(children: [
                                         Image.asset(
                                           'assets/images/recttwo.png',
                                           height: double.infinity,
@@ -462,24 +558,31 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
                                         ),
                                         Align(
                                           alignment: Alignment.bottomCenter,
-                                          child:  Container(
+                                          child: Container(
                                             alignment: Alignment.center,
-                                            color: Colors.black.withOpacity(.30),
+                                            color:
+                                                Colors.black.withOpacity(.30),
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Text(Customstrings.comingsoon,style: const TextStyle(color: Colors.white),),
+                                            child: Text(
+                                              Customstrings.comingsoon,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         )
+                                      ])),
+                                ),
+                              ]),
+                  )
+                    ),
+                  Visibility(
+                      visible: subCourseVisible,
+                      child : Flexible(
+                        child: getList(),
+                      )
+                  ),
 
-                                      ]
-
-
-                                  )),
-                            ),
-
-
-
-                          ]))
                 ])),
             Container(
                 margin: const EdgeInsets.only(top: 20.0),
@@ -487,6 +590,65 @@ class HomeState extends State<HomeWork>  with SingleTickerProviderStateMixin{
             /* Icon(Icons.directions_car),
               Icon(Icons.directions_transit),*/
           ],
-        ),);
+        ));
+  }
+
+  Widget getList() {
+    return Expanded(
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, mainAxisSpacing: 5, crossAxisSpacing: 5),
+        itemCount: moduleList?.length ?? 0,
+        itemBuilder: (context, position) {
+          return Container(
+              child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => ModuleDetail(
+                              moduleList![position].content.toString(),
+                              moduleList![position].title.toString(),
+                              moduleList![position].mobilevr.toString(),
+                              moduleList![position].ar.toString(),
+                              baseUrl)));
+                    },
+                    child: SizedBox(
+                      height: 120,
+                      width: double.infinity,
+                      child: Card(
+                          color: Colors.white,
+                          semanticContainer: true,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          elevation: 5,
+                          child: Stack(children: [
+                            Image.network(
+                              "$baseUrl/${moduleList![position].image}",
+                              height: double.infinity,
+                              width: double.infinity,
+                              fit: BoxFit.fill,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                alignment: Alignment.center,
+                                color: Colors.black.withOpacity(.30),
+                                height: 30,
+                                width: double.infinity,
+                                child: Text(
+                                  moduleList![position].title.toString(),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            )
+                          ])),
+                    ),
+                  )));
+        },
+      ),
+    );
   }
 }

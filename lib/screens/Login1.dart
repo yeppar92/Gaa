@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:daa/common/Customstrings.dart';
 import 'package:daa/screens/Forgotpass.dart';
 import 'package:flutter/gestures.dart';
@@ -22,7 +24,7 @@ class LoginState extends State<Login1> {
   var _passwordVisible = false,status = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-
+  StreamController<bool> streamController = StreamController<bool>();
   @override
   void initState() {
     super.initState();
@@ -56,7 +58,7 @@ class LoginState extends State<Login1> {
             MaterialPageRoute(
                 builder:
                     (BuildContext context) =>
-                    const Dashboard()));
+                     Dashboard(streamController,streamController.stream)));
       } else {
         Common.showToast("Please check your credentials", "red");
       }

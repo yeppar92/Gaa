@@ -177,8 +177,8 @@ class loginState extends State<Login> {
                                     color: Common.colorAccent),
                               ))),
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => Dashboard()));
+                      /*  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (BuildContext context) => Dashboard()));*/
                       },
 
                       child: Text(
