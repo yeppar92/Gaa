@@ -1,16 +1,17 @@
-
 import 'dart:async';
 
 import 'package:daa/common/Customstrings.dart';
 import 'package:daa/screens/Forgotpass.dart';
+import 'package:daa/widgets/TextWidget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 import '../common/ApiServices.dart';
 import '../common/Common.dart';
+import '../widgets/RoundedButton.dart';
+import '../widgets/TextFieldWidget.dart';
 import 'Dashboard.dart';
 
 class Login1 extends StatefulWidget {
@@ -21,14 +22,13 @@ class Login1 extends StatefulWidget {
 }
 
 class LoginState extends State<Login1> {
-  var _passwordVisible = false,status = false;
+  var _passwordVisible = true, status = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   StreamController<bool> streamController = StreamController<bool>();
   @override
   void initState() {
     super.initState();
-    _passwordVisible = false;
     checkForPref();
   }
 
@@ -37,10 +37,10 @@ class LoginState extends State<Login1> {
   bool validate() {
     bool valid = true;
     if (!Common.isValidEmail(emailController.text)) {
-      Common.showToast("Please enter your valid registered email.","red");
+      Common.showToast("Please enter your valid registered email.", "red");
       valid = false;
-    } else if (passController.text.isEmpty){
-      Common.showToast("Please enter your password.","red");
+    } else if (passController.text.isEmpty) {
+      Common.showToast("Please enter your password.", "red");
       valid = false;
     }
     return valid;
@@ -50,25 +50,18 @@ class LoginState extends State<Login1> {
     Common.showLoaderDialog(context);
     final service = ApiServices();
     service.loginUser(emailController.text, passController.text).then((value) {
-       Navigator.pop(context);
+      Navigator.pop(context);
       if (value.status == true) {
         print("response login >>>>>> ${value.message}");
         Common.SetPreferences("token", value.token.toString());
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-                builder:
-                    (BuildContext context) =>
-                     Dashboard(streamController,streamController.stream)));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                Dashboard(streamController, streamController.stream)));
       } else {
         Common.showToast("Please check your credentials", "red");
       }
-      
-
-
-
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -110,104 +103,62 @@ class LoginState extends State<Login1> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Text(
-                                  Customstrings.signin,
-                                  style: const TextStyle(
-                                      color: Common.txtColor,
-                                      fontSize: 24,
-                                      fontFamily: 'PoppinBold'),
-                                ),
+                                TextWidget(
+                                    text: Customstrings.signin,
+                                    txtColor: Common.txtColor,
+                                    fontFamily: "PoppinBold",
+                                    fontSize: 24.0,
+                                    textAlign: TextAlign.left),
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Text(
-                                  Customstrings.signinwith,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      color: Common.txtColor,
-                                      fontSize: 16,
-                                      fontFamily: 'PoppinRegular'),
-                                ),
+                                TextWidget(
+                                    text: Customstrings.signinwith,
+                                    txtColor: Common.txtColor,
+                                    fontFamily: "PoppinRegular",
+                                    fontSize: 16.0,
+                                    textAlign: TextAlign.center),
                                 const SizedBox(
                                   height: 40,
                                 ),
-                                SizedBox(
-                                  height: 50,
-                                  child: TextField(
-                                    controller: emailController,
-                                    cursorColor: Common.txtColor,
-                                    keyboardType: TextInputType.emailAddress,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                    decoration: InputDecoration(
-                                      fillColor: Common.list_divider,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                            const BorderSide(color: Colors.white),
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            const BorderSide(color: Colors.white),
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                      ),
-                                      hintText: " ${Customstrings.email}",
-                                      counterText: "",
-                                      hintStyle: const TextStyle(
-                                        color: Common.hintColor,
-                                      ),
-                                    ),
-                                  ),
+                                TextFieldWidget(
+                                  onPressed: () => print("username"),
+                                  controller: emailController,
+                                  cursorColor: Common.txtColor,
+                                  fillColor: Common.list_divider,
+                                  hintTxt: Customstrings.email,
+                                  txtColor: Common.txtColor,
+                                  hintColor: Common.hintColor,
+                                  enableColor: Colors.white,
+                                  focusColor: Colors.white,
+                                  obsucureTxt: false,
+                                  checkPass: false,
+                                  circularSize: 30.0,
+                                  height: 50.0,
+                                  width: double.infinity,
                                 ),
                                 const SizedBox(
                                   height: 25,
                                 ),
-                                TextField(
+                                TextFieldWidget(
+                                  onPressed: () {
+                                    setState(() {
+                                      _passwordVisible = !_passwordVisible;
+                                    });
+                                  },
                                   controller: passController,
                                   cursorColor: Common.txtColor,
-                                  style: const TextStyle(
-                                    color: Common.txtColor,
-                                  ),
-                                  obscureText: !_passwordVisible,
-                                  decoration: InputDecoration(
-                                    fillColor: Common.list_divider,
-                                    filled: true,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.white),
-                                      borderRadius:
-                                          BorderRadius.circular(30.0),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.white),
-                                      borderRadius:
-                                          BorderRadius.circular(30.0),
-                                    ),
-                                    hintText: " ${Customstrings.pass}",
-                                    counterText: "",
-                                    hintStyle: const TextStyle(
-                                      color: Common.hintColor,
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                          _passwordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Common.hintColor),
-                                      onPressed: () {
-                                        // Update the state i.e. toogle the state of passwordVisible variable
-                                        setState(() {
-                                          _passwordVisible =
-                                              !_passwordVisible;
-                                        });
-                                      },
-                                    ),
-                                  ),
+                                  fillColor: Common.list_divider,
+                                  hintTxt: Customstrings.pass,
+                                  txtColor: Common.txtColor,
+                                  hintColor: Common.hintColor,
+                                  enableColor: Colors.white,
+                                  focusColor: Colors.white,
+                                  obsucureTxt: _passwordVisible,
+                                  checkPass: true,
+                                  circularSize: 30.0,
+                                  height: 50.0,
+                                  width: double.infinity,
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -216,7 +167,8 @@ class LoginState extends State<Login1> {
                                   alignment: Alignment.topRight,
                                   child: Text.rich(
                                     TextSpan(
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: Customstrings.forgot,
@@ -241,55 +193,39 @@ class LoginState extends State<Login1> {
                                   ),
                                 ),
                                 Container(
-                                  margin:
-                                      const EdgeInsets.only(top: 30, bottom: 60),
-                                  height: 50,
-                                  width: double.infinity,
-                                  child: TextButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateColor.resolveWith(
-                                                (states) =>
-                                                    Common.colorAccent),
-                                        overlayColor:
-                                            MaterialStateColor.resolveWith(
-                                                (states) =>
-                                                    Common.rippleColor),
-                                        shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0),
-                                          side: const BorderSide(
-                                              color: Common.colorAccent),
-                                        ))),
-                                    onPressed: () async {
-                                      var status = await Permission.storage.status;
-                                      if(!status.isGranted){
-                                        await Permission.storage.request();
-                                      }
-                                      var status1 = await Permission.manageExternalStorage.status;
-                                      if(!status1.isGranted){
-                                        await Permission.manageExternalStorage.request();
-                                      }
+                                    margin: const EdgeInsets.only(
+                                        top: 30, bottom: 60),
+                                    child: RoundedButton(
+                                        onPressed: () async {
+                                          var status =
+                                              await Permission.storage.status;
+                                          if (!status.isGranted) {
+                                            await Permission.storage.request();
+                                          }
+                                          var status1 = await Permission
+                                              .manageExternalStorage.status;
+                                          if (!status1.isGranted) {
+                                            await Permission
+                                                .manageExternalStorage
+                                                .request();
+                                          }
 
-
-                                  if (status.isGranted && status1.isGranted) {
-                                    if (validate()) {
-                                      callSignInApi();
-                                    }
-                                  }
-
-                                    },
-                                    child: Text(
-                                      Customstrings.signin,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontFamily: 'PoppinMedium'),
-                                    ),
-                                  ),
-                                ),
+                                          if (status.isGranted &&
+                                              status1.isGranted) {
+                                            if (validate()) {
+                                              callSignInApi();
+                                            }
+                                          }
+                                        },
+                                        textColor: Colors.white,
+                                        btnColor: Common.colorAccent,
+                                        rippleColor:
+                                            Colors.white.withOpacity(.20),
+                                        borderColor: Common.colorAccent,
+                                        text: Customstrings.signin,
+                                        height: 50.0,
+                                        width: double.infinity,
+                                        circularSize: 30.0)),
                               ],
                             )),
                       ],
