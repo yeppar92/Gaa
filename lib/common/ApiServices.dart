@@ -6,6 +6,7 @@ import 'package:daa/common/Common.dart';
 import 'package:daa/models/Loginmodel.dart';
 import 'package:daa/models/sub_modules_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 class ApiServices {
 
@@ -14,7 +15,7 @@ class ApiServices {
   final Dio _dio = new Dio();
 
   // for login api
-  Future<Loginmodel> loginUser(String email,String pass) async {
+  Future<Loginmodel> loginUser(BuildContext context,String email,String pass) async {
     // Perform GET request to the endpoint "/users/<id>"
     var map = <String, dynamic>{};
     map['email'] = email;

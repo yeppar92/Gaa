@@ -31,8 +31,7 @@ class DashState extends State<Dashboard> {
 
   final pages = [
      HomeWork(streamController1.stream),
-     HomeWork(streamController1.stream),
-     HomeWork(streamController1.stream),
+
   ];
 
   @override
@@ -146,7 +145,8 @@ class DashState extends State<Dashboard> {
                             unselectedLabelStyle: textTheme.caption,
                             onTap: (value) {
                               setState(() {
-                                pageIndex = value;
+                                //pageIndex = value;
+                                pageIndex = 0;
                               });
                             },
                             items: const [

@@ -28,6 +28,7 @@ class Customstrings {
   static const String profile = "Profile";
   static const String desktopVr = "Mobile VR";
   static const String mobileAr = "Mobile AR";
+  static const String nointernet = "No Internet Connection";
 
 
 

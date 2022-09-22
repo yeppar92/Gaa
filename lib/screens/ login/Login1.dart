@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:daa/common/Customstrings.dart';
+import 'package:daa/screens/%20login/LoginViewModel.dart';
 import 'package:daa/screens/Forgotpass.dart';
 import 'package:daa/widgets/TextWidget.dart';
 import 'package:flutter/gestures.dart';
@@ -8,11 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../common/ApiServices.dart';
-import '../common/Common.dart';
-import '../widgets/RoundedButton.dart';
-import '../widgets/TextFieldWidget.dart';
-import 'Dashboard.dart';
+import '../../common/ApiServices.dart';
+import '../../common/Common.dart';
+import '../../widgets/RoundedButton.dart';
+import '../../widgets/TextFieldWidget.dart';
+import '../Dashboard.dart';
 
 class Login1 extends StatefulWidget {
   const Login1({Key? key}) : super(key: key);
@@ -25,7 +27,8 @@ class LoginState extends State<Login1> {
   var _passwordVisible = true, status = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  StreamController<bool> streamController = StreamController<bool>();
+
+  LoginViewModel loginViewModel = LoginViewModel();
   @override
   void initState() {
     super.initState();
@@ -47,20 +50,7 @@ class LoginState extends State<Login1> {
   }
 
   callSignInApi() {
-    Common.showLoaderDialog(context);
-    final service = ApiServices();
-    service.loginUser(emailController.text, passController.text).then((value) {
-      Navigator.pop(context);
-      if (value.status == true) {
-        print("response login >>>>>> ${value.message}");
-        Common.SetPreferences("token", value.token.toString());
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                Dashboard(streamController, streamController.stream)));
-      } else {
-        Common.showToast("Please check your credentials", "red");
-      }
-    });
+    loginViewModel.loginUser(context,emailController.text, passController.text);
   }
 
   @override
@@ -183,7 +173,7 @@ class LoginState extends State<Login1> {
                                               ..onTap = () {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
-                                                        builder: (BuildContext
+                                                  builder: (BuildContext
                                                                 context) =>
                                                             const Forgotpass()));
                                               }),
