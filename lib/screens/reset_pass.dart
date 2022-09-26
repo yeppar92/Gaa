@@ -1,11 +1,11 @@
-import 'package:daa/common/Customstrings.dart';
+import 'package:daa/common/custom_strings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../common/Common.dart';
-import 'Dashboard.dart';
-import 'Verification.dart';
+import '../common/common.dart';
+import 'dashboard/dashboard.dart';
+import 'verification.dart';
 
 class Resetpass extends StatefulWidget {
   const Resetpass({Key? key}) : super(key: key);

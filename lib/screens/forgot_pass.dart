@@ -1,23 +1,24 @@
-import 'package:daa/common/Customstrings.dart';
-import 'package:daa/screens/%20login/Login1.dart';
+
+import 'package:daa/common/custom_strings.dart';
+import 'package:daa/screens/reset_pass.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 
-import '../common/Common.dart';
-import 'Dashboard.dart';
+import '../common/common.dart';
+import 'dashboard/dashboard.dart';
 
 
-class Verification extends StatefulWidget {
-  const Verification({Key? key}) : super(key: key);
+class Forgotpass extends StatefulWidget {
+  const Forgotpass({Key? key}) : super(key: key);
 
   @override
-  VerificationState createState() => VerificationState();
+  ForgotState createState() => ForgotState();
 }
 
-class VerificationState extends State<Verification> {
- var otpValue = "";
+class ForgotState extends State<Forgotpass> {
+
+
   @override
   void initState() {
     super.initState();
@@ -40,8 +41,6 @@ class VerificationState extends State<Verification> {
 
         ),
         child: Scaffold(
-            extendBody: true,
-            extendBodyBehindAppBar: true,
             appBar: AppBar(
               centerTitle: true,
               leading: IconButton(
@@ -51,6 +50,8 @@ class VerificationState extends State<Verification> {
               backgroundColor: Colors.transparent,
               elevation: 0.0,
             ),
+            extendBody: true,
+            extendBodyBehindAppBar: true,
             body: Container(
               width: double.infinity,
               height: double.infinity,
@@ -82,12 +83,12 @@ class VerificationState extends State<Verification> {
                         )
                     ),
                     child: Container(
-                      padding: const EdgeInsets.all(20),
+                         padding: const EdgeInsets.all(20),
                         child: Column(
                           children: [
-                            const SizedBox(height: 10,),
+                            SizedBox(height: 10,),
                             Text(
-                              Customstrings.verification,
+                              Customstrings.forgot,
                               style: const TextStyle(
                                   color: Common.txtColor,
                                   fontSize: 24,
@@ -95,81 +96,47 @@ class VerificationState extends State<Verification> {
                             ),
                             const SizedBox(height: 10,),
                             Text(
-                              Customstrings.sent_code_email,
+                              Customstrings.forgot_email,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Common.txtColor,
                                   fontSize: 16,
                                   fontFamily: 'PoppinRegular'),
                             ),
-                            const Text(
-                              'av@gmail.com',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Common.txtColor,
-                                  fontSize: 16,
-                                  fontFamily: 'PoppinRegular'),
-                            ),
-                            const SizedBox(height: 20,),
-                            PinCodeFields(
-                              length: 4,
-                              fieldBorderStyle: FieldBorderStyle.Square,
-                              responsive: false,
-                              fieldHeight:40.0,
-                              fieldWidth: 40.0,
-                              borderWidth:1.0,
-                              activeBorderColor: Colors.white,
-                              activeBackgroundColor: Common.colorAccent,
-                              borderRadius: BorderRadius.circular(10.0),
-                              keyboardType: TextInputType.number,
-                              autoHideKeyboard: true,
-                              fieldBackgroundColor: Common.list_divider,
-                              borderColor: Colors.white,
-                              textStyle: const TextStyle(
-                                color: Common.txtColor,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              onComplete: (output) {
-                                // Your logic with pin code
-
-                                otpValue = output.toString();
-                                print(output);
-                              },
-                              onChange: (output){
-                                otpValue = output.toString();
-                                print(output);
-                              },
-                            ),
-                            const SizedBox(height: 10,),
-                            Align(
-                              alignment: Alignment.center,
-                              child :  Text.rich(
-                                TextSpan(
-                                  text: Customstrings.donthave,
-                                  style: const TextStyle(color: Common.txtColor, fontSize: 14, fontFamily: 'PoppinRegular'),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: Customstrings.resend,
-                                        style: const TextStyle(
-                                          color: Common.colorAccent,
-                                          fontFamily: 'PoppinRegular',
-                                          fontSize: 14,
-                                          decoration: TextDecoration.underline,
-                                        ),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-
-
-                                          }),
-                                    // can add more TextSpans here...
-                                  ],
+                            const SizedBox(height: 40,),
+                            SizedBox(
+                              height: 50,
+                              child: TextField(
+                                cursorColor: Common.txtColor,
+                                keyboardType: TextInputType.emailAddress,
+                                maxLength: 10,
+                                style : const TextStyle(
+                                  color: Colors.black,
+                                ),
+                                decoration: InputDecoration(
+                                  fillColor: Common.list_divider,
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color:Colors.white),
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  hintText: " ${Customstrings.email}",
+                                  counterText: "",
+                                  hintStyle: const TextStyle(
+                                    color: Common.hintColor,
+                                  ),
                                 ),
                               ),
                             ),
 
+
+
                             Container(
-                              margin: const EdgeInsets.only(top: 30,bottom: 60),
+                              margin: const EdgeInsets.only(top: 30,bottom: 100),
                               height: 50,
                               width: double.infinity,
                               child: TextButton(
@@ -191,11 +158,12 @@ class VerificationState extends State<Verification> {
                                               color: Common.colorAccent),
                                         ))),
                                 onPressed: () {
-                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                      builder: (BuildContext context) => const Resetpass()));
                                 },
 
                                 child: Text(
-                                  Customstrings.verify_otp,
+                                  Customstrings.conti,
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
@@ -208,11 +176,10 @@ class VerificationState extends State<Verification> {
                       ),
                     
                   )
-
                 ],
-              ))]),
-            ),
-          
+              )
+    )]),
+            ), 
            
         ));
   }

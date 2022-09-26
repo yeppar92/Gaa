@@ -1,7 +1,8 @@
 
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:daa/models/sub_modules_model.dart';
-import 'package:daa/screens/ModuleDetail.dart';
+import 'package:daa/screens/module_detail.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/gestures.dart';
@@ -10,9 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../common/ApiServices.dart';
-import '../common/Common.dart';
-import '../common/Customstrings.dart';
+import '../common/api_services.dart';
+import '../common/common.dart';
+import '../common/custom_strings.dart';
 
 class Subcourses extends StatefulWidget {
   var title = "";
@@ -278,12 +279,18 @@ class SubCourseState extends State<Subcourses> {
                           ),
                           elevation: 5,
                           child: Stack(children: [
-                            Image.network(
+
+                            CachedNetworkImage(
+                              imageUrl: "$imageUrl/${moduleList![position].image}",
+                              placeholder: (context, url) => const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                            ),
+                          /*  Image.network(
                               "$imageUrl/${moduleList![position].image}",
                               height: double.infinity,
                               width: double.infinity,
                               fit: BoxFit.fill,
-                            ),
+                            ),*/
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(

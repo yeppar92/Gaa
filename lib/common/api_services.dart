@@ -2,8 +2,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:daa/common/Common.dart';
-import 'package:daa/models/Loginmodel.dart';
+import 'package:daa/common/common.dart';
+import 'package:daa/models/login_model.dart';
 import 'package:daa/models/sub_modules_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +15,7 @@ class ApiServices {
   final Dio _dio = new Dio();
 
   // for login api
-  Future<Loginmodel> loginUser(BuildContext context,String email,String pass) async {
+  Future<Loginmodel> loginUser(String email,String pass) async {
     // Perform GET request to the endpoint "/users/<id>"
     var map = <String, dynamic>{};
     map['email'] = email;
@@ -32,14 +32,12 @@ class ApiServices {
 
   // for modules api
   Future<SubModulesModel> getModules(String token) async {
-
     var url = Uri.parse('${Common.mainurl}modules');
     print(url);
     print("token is = $token");
     Response moduleData = await _dio.post(url.toString(),options: Options(headers: {"Content-Type":"application/json","Accept":"application/json","authorization":"Bearer $token"}));
     print('modules Info: ${moduleData.data}');
     SubModulesModel subModulesModel = SubModulesModel.fromJson(moduleData.data);
-
     return subModulesModel;
   }
 

@@ -1,7 +1,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:daa/common/Customstrings.dart';
-import 'package:daa/screens/Forgotpass.dart';
+import 'package:daa/common/custom_strings.dart';
+import 'package:daa/screens/forgot_pass.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/gestures.dart';
@@ -12,9 +12,9 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
-import '../common/ApiServices.dart';
-import '../common/Common.dart';
-import 'Dashboard.dart';
+import '../common/api_services.dart';
+import '../common/common.dart';
+import 'dashboard/dashboard.dart';
 
 class ModuleDetail extends StatefulWidget {
   var content = "",title = "",mobileVr = "",mobileAr = "",baseUrl = "";

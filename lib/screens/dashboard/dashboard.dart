@@ -1,25 +1,26 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:daa/common/Common.dart';
-import 'package:daa/common/Customstrings.dart';
-import 'package:daa/screens/Subcourses.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:daa/common/common.dart';
+import 'package:daa/common/custom_strings.dart';
+import 'package:daa/screens/dashboard/dashboard_view_model.dart';
 import 'package:flutter/material.dart';
 
-import '../common/ApiServices.dart';
-import '../models/sub_modules_model.dart';
-import 'ModuleDetail.dart';
+import '../../common/api_services.dart';
+import '../../models/sub_modules_model.dart';
+import '../module_detail.dart';
 
 var courseVisible = true,
     subCourseVisible = false,
-    AuthToken = "",
+    authToken = "",
  tabTitle = Customstrings.courses;
 StreamController<bool> streamController = StreamController<bool>();
 StreamController<bool> streamController1 = StreamController<bool>();
 class Dashboard extends StatefulWidget {
   final Stream<bool>stream;
   final StreamController<bool> srController;
-  Dashboard(this.srController,this.stream);
+  const Dashboard(this.srController,this.stream, {super.key});
 
   @override
   DashState createState() => DashState();
@@ -50,11 +51,11 @@ class DashState extends State<Dashboard> {
 
   checkForPref() async {
     String token = await Common.getPreferences("token");
-    AuthToken = token;
+    authToken = token;
   }
 
   void checkBack(bool checkBack) {
-       print("call back called>>>>>>>");
+
        setState((){
          checkForBack = checkBack;
        });
@@ -72,7 +73,7 @@ class DashState extends State<Dashboard> {
             child:  WillPopScope(
         onWillPop: () async {
           if (checkForBack) {
-            print("call back button>>>>>>>");
+
             setState(() {
               checkForBack = false;
               streamController1.add(true);
@@ -86,11 +87,11 @@ class DashState extends State<Dashboard> {
                 appBar: AppBar(
                   backgroundColor: Common.colorAccent,
                   leading: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () {
                         //Navigator.of(context).pop();
                         if (checkForBack) {
-                          print("call back button>>>>>>>");
+
                           setState(() {
                             checkForBack = false;
                             streamController1.add(true);
@@ -176,7 +177,7 @@ class DashState extends State<Dashboard> {
 
 class HomeWork extends StatefulWidget {
   final Stream<bool>stream;
-  HomeWork(this.stream);
+  const HomeWork(this.stream, {super.key});
 
   @override
   HomeState createState() => HomeState();
@@ -186,6 +187,7 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   var baseUrl = "";
   List<Data>? moduleList;
+  DashboardViewModel dashboardViewModel = DashboardViewModel();
 
   @override
   void initState() {
@@ -204,7 +206,7 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
   }
 
   void checkVisible() {
-    print("call visible function");
+
     setState(() {
       courseVisible = true;
       subCourseVisible = false;
@@ -214,11 +216,7 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
 
 
   callModulesApi() {
-    Common.showLoaderDialog(context);
-    final service = ApiServices();
-    service.getModules(AuthToken).then((value) {
-      Navigator.pop(context);
-      print("status is = ${value.status}");
+    dashboardViewModel.fetchModuleData(context, authToken).then((value){
       if (value.status.toString() == "true") {
         setState(() {
           baseUrl = value.baseUrl.toString();
@@ -227,12 +225,13 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
           subCourseVisible = true;
           tabTitle = Customstrings.grtraining;
           streamController.add(true);
-
         });
-      } else {
+      }else {
         Common.showToast("something went wrong", "red");
       }
     });
+
+
   }
 
   @override
@@ -254,7 +253,7 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
               Tab(
                 text: tabTitle,
               ),
-              Tab(
+              const Tab(
                 text: Customstrings.dashboard,
               ),
             ],
@@ -266,7 +265,7 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
           children: [
             Container(
                 color: Common.colorAccent,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(children: [
                     Visibility(
                         visible: courseVisible,
@@ -600,53 +599,58 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
             crossAxisCount: 2, mainAxisSpacing: 5, crossAxisSpacing: 5),
         itemCount: moduleList?.length ?? 0,
         itemBuilder: (context, position) {
-          return Container(
-              child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => ModuleDetail(
-                              moduleList![position].content.toString(),
+          return Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => ModuleDetail(
+                          moduleList![position].content.toString(),
+                          moduleList![position].title.toString(),
+                          moduleList![position].mobilevr.toString(),
+                          moduleList![position].ar.toString(),
+                          baseUrl)));
+                },
+                child: SizedBox(
+                  height: 120,
+                  width: double.infinity,
+                  child: Card(
+                      color: Colors.white,
+                      semanticContainer: true,
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 5,
+                      child: Stack(children: [
+                        CachedNetworkImage(
+                          imageUrl: "$baseUrl/${moduleList![position].image}",
+                          placeholder: (context, url) => const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        ),
+
+                      /*  Image.network(
+                          "$baseUrl/${moduleList![position].image}",
+                          height: double.infinity,
+                          width: double.infinity,
+                          fit: BoxFit.fill,
+                        ),*/
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            alignment: Alignment.center,
+                            color: Colors.black.withOpacity(.30),
+                            height: 30,
+                            width: double.infinity,
+                            child: Text(
                               moduleList![position].title.toString(),
-                              moduleList![position].mobilevr.toString(),
-                              moduleList![position].ar.toString(),
-                              baseUrl)));
-                    },
-                    child: SizedBox(
-                      height: 120,
-                      width: double.infinity,
-                      child: Card(
-                          color: Colors.white,
-                          semanticContainer: true,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          elevation: 5,
-                          child: Stack(children: [
-                            Image.network(
-                              "$baseUrl/${moduleList![position].image}",
-                              height: double.infinity,
-                              width: double.infinity,
-                              fit: BoxFit.fill,
+                              style: const TextStyle(color: Colors.white),
                             ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                alignment: Alignment.center,
-                                color: Colors.black.withOpacity(.30),
-                                height: 30,
-                                width: double.infinity,
-                                child: Text(
-                                  moduleList![position].title.toString(),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            )
-                          ])),
-                    ),
-                  )));
+                          ),
+                        )
+                      ])),
+                ),
+              ));
         },
       ),
     );

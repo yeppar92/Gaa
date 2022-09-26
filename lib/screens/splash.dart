@@ -1,13 +1,12 @@
 
-import 'package:daa/screens/%20login/Login1.dart';
+import 'package:daa/screens/%20login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
-import '../common/Common.dart';
-import 'Dashboard.dart';
-import 'Login.dart';
+import '../common/common.dart';
+import 'dashboard/dashboard.dart';
 
 
 

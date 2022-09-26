@@ -1,20 +1,20 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:daa/common/Customstrings.dart';
-import 'package:daa/screens/%20login/LoginViewModel.dart';
-import 'package:daa/screens/Forgotpass.dart';
-import 'package:daa/widgets/TextWidget.dart';
+import 'package:daa/common/custom_strings.dart';
+import 'package:daa/screens/%20login/login_view_model.dart';
+import 'package:daa/screens/forgot_pass.dart';
+import 'package:daa/widgets/text_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../common/ApiServices.dart';
-import '../../common/Common.dart';
-import '../../widgets/RoundedButton.dart';
-import '../../widgets/TextFieldWidget.dart';
-import '../Dashboard.dart';
+import '../../common/api_services.dart';
+import '../../common/common.dart';
+import '../../widgets/rounded_button.dart';
+import '../../widgets/text_field_widget.dart';
+import '../dashboard/dashboard.dart';
 
 class Login1 extends StatefulWidget {
   const Login1({Key? key}) : super(key: key);
@@ -35,6 +35,15 @@ class LoginState extends State<Login1> {
     checkForPref();
   }
 
+  @override
+  void dispose(){
+    super.dispose();
+    emailController.dispose();
+    passController.dispose();
+    loginViewModel.dispose();
+
+  }
+
   checkForPref() async {}
 
   bool validate() {
@@ -50,7 +59,7 @@ class LoginState extends State<Login1> {
   }
 
   callSignInApi() {
-    loginViewModel.loginUser(context,emailController.text, passController.text);
+    loginViewModel.fetchLoginData(context,emailController.text, passController.text);
   }
 
   @override
