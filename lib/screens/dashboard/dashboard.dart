@@ -2,25 +2,30 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:daa/common/common.dart';
 import 'package:daa/common/custom_strings.dart';
+import 'package:daa/models/all_courses_model.dart';
 import 'package:daa/screens/dashboard/dashboard_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../common/api_services.dart';
 import '../../models/sub_modules_model.dart';
+import '../../widgets/text_widget.dart';
 import '../module_detail.dart';
 
 var courseVisible = true,
     subCourseVisible = false,
     authToken = "",
- tabTitle = Customstrings.courses;
+    tabTitle = Customstrings.courses;
 StreamController<bool> streamController = StreamController<bool>();
 StreamController<bool> streamController1 = StreamController<bool>();
+DashboardViewModel dashboardViewModel = DashboardViewModel();
 class Dashboard extends StatefulWidget {
-  final Stream<bool>stream;
+  final Stream<bool> stream;
   final StreamController<bool> srController;
-  const Dashboard(this.srController,this.stream, {super.key});
+  const Dashboard(this.srController, this.stream, {super.key});
 
   @override
   DashState createState() => DashState();
@@ -31,8 +36,8 @@ class DashState extends State<Dashboard> {
   var checkForBack = false;
 
   final pages = [
-     HomeWork(streamController1.stream),
-
+    WithoutSign()
+    //HomeWork(streamController1.stream),
   ];
 
   @override
@@ -46,7 +51,6 @@ class DashState extends State<Dashboard> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkForPref();
     });
-
   }
 
   checkForPref() async {
@@ -55,11 +59,9 @@ class DashState extends State<Dashboard> {
   }
 
   void checkBack(bool checkBack) {
-
-       setState((){
-         checkForBack = checkBack;
-       });
-
+    setState(() {
+      checkForBack = checkBack;
+    });
   }
 
   @override
@@ -70,113 +72,109 @@ class DashState extends State<Dashboard> {
         color: Common.colorAccent,
         child: DefaultTabController(
             length: 2,
-            child:  WillPopScope(
-        onWillPop: () async {
-          if (checkForBack) {
-
-            setState(() {
-              checkForBack = false;
-              streamController1.add(true);
-
-            });
-          }
-      return false;
-    },
-            child : Scaffold(
-                extendBody: true,
-                appBar: AppBar(
-                  backgroundColor: Common.colorAccent,
-                  leading: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () {
-                        //Navigator.of(context).pop();
-                        if (checkForBack) {
-
-                          setState(() {
-                            checkForBack = false;
-                            streamController1.add(true);
-
-                          });
-                        }
-                      }),
-                  actions: <Widget>[
-                    IconButton(
-                      icon: Image.asset(
-                        "assets/images/proicon.png",
-                        width: 30,
-                        height: 30,
-                      ),
-                      onPressed: () {
-                        // do something
-                      },
-                    )
-                  ],
-                  title: Image.asset(
-                    'assets/images/splashlogo.png',
-                    height: 50,
-                    width: 50,
-                  ),
-                  centerTitle: true,
-                ),
-                body: pages[pageIndex],
-                bottomNavigationBar: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          topLeft: Radius.circular(20)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Common.tfbackColor.withOpacity(.40),
-                            spreadRadius: 0,
-                            blurRadius: 10),
-                      ],
-                    ),
-                    child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                        ),
-                        child: BottomNavigationBar(
-                            type: BottomNavigationBarType.fixed,
-                            currentIndex: pageIndex,
-                            backgroundColor: Colors.white.withOpacity(.80),
-                            selectedItemColor: Common.colorAccent,
-                            unselectedItemColor: Common.txtColor,
-                            selectedLabelStyle: textTheme.caption,
-                            unselectedLabelStyle: textTheme.caption,
-                            onTap: (value) {
+            child: WillPopScope(
+                onWillPop: () async {
+                  if (checkForBack) {
+                    setState(() {
+                      checkForBack = false;
+                      streamController1.add(true);
+                    });
+                  }
+                  return false;
+                },
+                child: Scaffold(
+                    extendBody: true,
+                  /*  appBar: AppBar(
+                      backgroundColor: Common.colorAccent,
+                      leading: IconButton(
+                          icon:
+                              const Icon(Icons.arrow_back, color: Colors.white),
+                          onPressed: () {
+                            //Navigator.of(context).pop();
+                            if (checkForBack) {
                               setState(() {
-                                //pageIndex = value;
-                                pageIndex = 0;
+                                checkForBack = false;
+                                streamController1.add(true);
                               });
-                            },
-                            items: const [
-                              BottomNavigationBarItem(
-                                label: Customstrings.courses,
-                                icon: ImageIcon(
-                                  AssetImage("assets/images/homeworkicon.png"),
-                                ),
-                              ),
-                              BottomNavigationBarItem(
-                                label: Customstrings.dashboard,
-                                icon: ImageIcon(
-                                  AssetImage("assets/images/dashicon.png"),
-                                ),
-                              ),
-                              BottomNavigationBarItem(
-                                label: Customstrings.profile,
-                                icon: ImageIcon(
-                                  AssetImage("assets/images/usericon.png"),
-                                ),
-                              ),
-                            ]))))
-            )
-        ));
+                            }
+                          }),
+                      actions: <Widget>[
+                        IconButton(
+                          icon: Image.asset(
+                            "assets/images/proicon.png",
+                            width: 30,
+                            height: 30,
+                          ),
+                          onPressed: () {
+                            // do something
+                          },
+                        )
+                      ],
+                      title: Image.asset(
+                        'assets/images/splashlogo.png',
+                        height: 50,
+                        width: 50,
+                      ),
+                      centerTitle: true,
+                    ),*/
+                    body: pages[pageIndex],
+                    bottomNavigationBar: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(20),
+                              topLeft: Radius.circular(20)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Common.tfbackColor.withOpacity(.40),
+                                spreadRadius: 0,
+                                blurRadius: 10),
+                          ],
+                        ),
+                        child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              topRight: Radius.circular(20.0),
+                            ),
+                            child: BottomNavigationBar(
+                                type: BottomNavigationBarType.fixed,
+                                currentIndex: pageIndex,
+                                backgroundColor: Colors.white.withOpacity(.80),
+                                selectedItemColor: Common.colorAccent,
+                                unselectedItemColor: Common.txtColor,
+                                selectedLabelStyle: textTheme.caption,
+                                unselectedLabelStyle: textTheme.caption,
+                                onTap: (value) {
+                                  setState(() {
+                                    //pageIndex = value;
+                                    pageIndex = 0;
+                                  });
+                                },
+                                items: const [
+                                  BottomNavigationBarItem(
+                                    label: Customstrings.courses,
+                                    icon: ImageIcon(
+                                      AssetImage(
+                                          "assets/images/homeworkicon.png"),
+                                    ),
+                                  ),
+                                  BottomNavigationBarItem(
+                                    label: Customstrings.dashboard,
+                                    icon: ImageIcon(
+                                      AssetImage("assets/images/dashicon.png"),
+                                    ),
+                                  ),
+                                  BottomNavigationBarItem(
+                                    label: Customstrings.profile,
+                                    icon: ImageIcon(
+                                      AssetImage("assets/images/usericon.png"),
+                                    ),
+                                  ),
+                                ])))))));
   }
 }
 
 class HomeWork extends StatefulWidget {
-  final Stream<bool>stream;
+  final Stream<bool> stream;
   const HomeWork(this.stream, {super.key});
 
   @override
@@ -187,7 +185,7 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   var baseUrl = "";
   List<Data>? moduleList;
-  DashboardViewModel dashboardViewModel = DashboardViewModel();
+
 
   @override
   void initState() {
@@ -196,7 +194,6 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
       checkVisible();
     });
     _tabController = TabController(length: 2, vsync: this);
-
   }
 
   @override
@@ -206,7 +203,6 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
   }
 
   void checkVisible() {
-
     setState(() {
       courseVisible = true;
       subCourseVisible = false;
@@ -214,9 +210,8 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
     });
   }
 
-
   callModulesApi() {
-    dashboardViewModel.fetchModuleData(context, authToken).then((value){
+    dashboardViewModel.fetchModuleData(context, authToken).then((value) {
       if (value.status.toString() == "true") {
         setState(() {
           baseUrl = value.baseUrl.toString();
@@ -226,12 +221,10 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
           tabTitle = Customstrings.grtraining;
           streamController.add(true);
         });
-      }else {
+      } else {
         Common.showToast("something went wrong", "red");
       }
     });
-
-
   }
 
   @override
@@ -245,7 +238,6 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
           automaticallyImplyLeading: false,
           backgroundColor: Common.colorAccent,
           elevation: 0.0,
-
           bottom: TabBar(
             controller: _tabController,
             labelPadding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -267,321 +259,304 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
                 color: Common.colorAccent,
                 padding: const EdgeInsets.all(10),
                 child: Column(children: [
-                    Visibility(
-                        visible: courseVisible,
-                     child : Flexible(
-                    child: GridView(
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: 5,
-                                      crossAxisSpacing: 5),
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      callModulesApi();
-                                      /* Navigator.of(context).push(MaterialPageRoute(
+                  Visibility(
+                      visible: courseVisible,
+                      child: Flexible(
+                        child: GridView(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 5,
+                                    crossAxisSpacing: 5),
+                            children: [
+                              InkWell(
+                                  onTap: () {
+                                    callModulesApi();
+                                    /* Navigator.of(context).push(MaterialPageRoute(
                                       builder: (BuildContext context) => Subcourses(Customstrings.grtraining)));*/
-                                    },
-                                    child: SizedBox(
-                                      height: 120,
-                                      width: double.infinity,
-                                      child: Card(
-                                          color: Colors.white,
-                                          semanticContainer: true,
-                                          clipBehavior:
-                                              Clip.antiAliasWithSaveLayer,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
+                                  },
+                                  child: SizedBox(
+                                    height: 120,
+                                    width: double.infinity,
+                                    child: Card(
+                                        color: Colors.white,
+                                        semanticContainer: true,
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        elevation: 5,
+                                        child: Stack(children: [
+                                          Image.asset(
+                                            'assets/images/rectone.png',
+                                            height: double.infinity,
+                                            width: double.infinity,
+                                            fit: BoxFit.fill,
                                           ),
-                                          elevation: 5,
-                                          child: Stack(children: [
-                                            Image.asset(
-                                              'assets/images/rectone.png',
-                                              height: double.infinity,
+                                          Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              color:
+                                                  Colors.black.withOpacity(.30),
+                                              height: 30,
                                               width: double.infinity,
-                                              fit: BoxFit.fill,
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                color: Colors.black
-                                                    .withOpacity(.30),
-                                                height: 30,
-                                                width: double.infinity,
-                                                child: Text(
-                                                  Customstrings.grtraining,
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                ),
+                                              child: Text(
+                                                Customstrings.grtraining,
+                                                style: const TextStyle(
+                                                    color: Colors.white),
                                               ),
-                                            )
-                                          ])),
-                                    )),
-                                SizedBox(
-                                  height: 120,
-                                  width: double.infinity,
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                            ),
+                                          )
+                                        ])),
+                                  )),
+                              SizedBox(
+                                height: 120,
+                                width: double.infinity,
+                                child: Card(
+                                    color: Colors.white,
+                                    semanticContainer: true,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 5,
+                                    child: Stack(children: [
+                                      Image.asset(
+                                        'assets/images/recttwo.png',
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        fit: BoxFit.fill,
                                       ),
-                                      elevation: 5,
-                                      child: Stack(children: [
-                                        Image.asset(
-                                          'assets/images/recttwo.png',
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          color: Colors.black.withOpacity(.30),
                                           height: double.infinity,
                                           width: double.infinity,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            color:
-                                                Colors.black.withOpacity(.30),
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Text(
-                                              Customstrings.comingsoon,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          child: Text(
+                                            Customstrings.comingsoon,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
-                                        )
-                                      ])),
-                                ),
-                                SizedBox(
-                                  height: 120,
-                                  width: double.infinity,
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        ),
+                                      )
+                                    ])),
+                              ),
+                              SizedBox(
+                                height: 120,
+                                width: double.infinity,
+                                child: Card(
+                                    color: Colors.white,
+                                    semanticContainer: true,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 5,
+                                    child: Stack(children: [
+                                      Image.asset(
+                                        'assets/images/rectthree.png',
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        fit: BoxFit.fill,
                                       ),
-                                      elevation: 5,
-                                      child: Stack(children: [
-                                        Image.asset(
-                                          'assets/images/rectthree.png',
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          color: Colors.black.withOpacity(.30),
                                           height: double.infinity,
                                           width: double.infinity,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            color:
-                                                Colors.black.withOpacity(.30),
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Text(
-                                              Customstrings.comingsoon,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          child: Text(
+                                            Customstrings.comingsoon,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
-                                        )
-                                      ])),
-                                ),
-                                SizedBox(
-                                  height: 120,
-                                  width: double.infinity,
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        ),
+                                      )
+                                    ])),
+                              ),
+                              SizedBox(
+                                height: 120,
+                                width: double.infinity,
+                                child: Card(
+                                    color: Colors.white,
+                                    semanticContainer: true,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 5,
+                                    child: Stack(children: [
+                                      Image.asset(
+                                        'assets/images/rectfour.png',
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        fit: BoxFit.fill,
                                       ),
-                                      elevation: 5,
-                                      child: Stack(children: [
-                                        Image.asset(
-                                          'assets/images/rectfour.png',
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          color: Colors.black.withOpacity(.30),
                                           height: double.infinity,
                                           width: double.infinity,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            color:
-                                                Colors.black.withOpacity(.30),
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Text(
-                                              Customstrings.comingsoon,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          child: Text(
+                                            Customstrings.comingsoon,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
-                                        )
-                                      ])),
-                                ),
-                                SizedBox(
-                                  height: 120,
-                                  width: double.infinity,
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        ),
+                                      )
+                                    ])),
+                              ),
+                              SizedBox(
+                                height: 120,
+                                width: double.infinity,
+                                child: Card(
+                                    color: Colors.white,
+                                    semanticContainer: true,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 5,
+                                    child: Stack(children: [
+                                      Image.asset(
+                                        'assets/images/rectfive.png',
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        fit: BoxFit.fill,
                                       ),
-                                      elevation: 5,
-                                      child: Stack(children: [
-                                        Image.asset(
-                                          'assets/images/rectfive.png',
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          color: Colors.black.withOpacity(.30),
                                           height: double.infinity,
                                           width: double.infinity,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            color:
-                                                Colors.black.withOpacity(.30),
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Text(
-                                              Customstrings.comingsoon,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          child: Text(
+                                            Customstrings.comingsoon,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
-                                        )
-                                      ])),
-                                ),
-                                SizedBox(
-                                  height: 120,
-                                  width: double.infinity,
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        ),
+                                      )
+                                    ])),
+                              ),
+                              SizedBox(
+                                height: 120,
+                                width: double.infinity,
+                                child: Card(
+                                    color: Colors.white,
+                                    semanticContainer: true,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 5,
+                                    child: Stack(children: [
+                                      Image.asset(
+                                        'assets/images/rectsix.png',
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        fit: BoxFit.fill,
                                       ),
-                                      elevation: 5,
-                                      child: Stack(children: [
-                                        Image.asset(
-                                          'assets/images/rectsix.png',
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          color: Colors.black.withOpacity(.30),
                                           height: double.infinity,
                                           width: double.infinity,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            color:
-                                                Colors.black.withOpacity(.30),
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Text(
-                                              Customstrings.comingsoon,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          child: Text(
+                                            Customstrings.comingsoon,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
-                                        )
-                                      ])),
-                                ),
-                                SizedBox(
-                                  height: 120,
-                                  width: double.infinity,
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        ),
+                                      )
+                                    ])),
+                              ),
+                              SizedBox(
+                                height: 120,
+                                width: double.infinity,
+                                child: Card(
+                                    color: Colors.white,
+                                    semanticContainer: true,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 5,
+                                    child: Stack(children: [
+                                      Image.asset(
+                                        'assets/images/recttwo.png',
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        fit: BoxFit.fill,
                                       ),
-                                      elevation: 5,
-                                      child: Stack(children: [
-                                        Image.asset(
-                                          'assets/images/recttwo.png',
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          color: Colors.black.withOpacity(.30),
                                           height: double.infinity,
                                           width: double.infinity,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            color:
-                                                Colors.black.withOpacity(.30),
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Text(
-                                              Customstrings.comingsoon,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          child: Text(
+                                            Customstrings.comingsoon,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
-                                        )
-                                      ])),
-                                ),
-                                SizedBox(
-                                  height: 120,
-                                  width: double.infinity,
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        ),
+                                      )
+                                    ])),
+                              ),
+                              SizedBox(
+                                height: 120,
+                                width: double.infinity,
+                                child: Card(
+                                    color: Colors.white,
+                                    semanticContainer: true,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 5,
+                                    child: Stack(children: [
+                                      Image.asset(
+                                        'assets/images/recttwo.png',
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        fit: BoxFit.fill,
                                       ),
-                                      elevation: 5,
-                                      child: Stack(children: [
-                                        Image.asset(
-                                          'assets/images/recttwo.png',
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          color: Colors.black.withOpacity(.30),
                                           height: double.infinity,
                                           width: double.infinity,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            color:
-                                                Colors.black.withOpacity(.30),
-                                            height: double.infinity,
-                                            width: double.infinity,
-                                            child: Text(
-                                              Customstrings.comingsoon,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          child: Text(
+                                            Customstrings.comingsoon,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
-                                        )
-                                      ])),
-                                ),
-                              ]),
-                  )
-                    ),
+                                        ),
+                                      )
+                                    ])),
+                              ),
+                            ]),
+                      )),
                   Visibility(
                       visible: subCourseVisible,
-                      child : Flexible(
+                      child: Flexible(
                         child: getList(),
-                      )
-                  ),
-
+                      )),
                 ])),
             Container(
                 margin: const EdgeInsets.only(top: 20.0),
@@ -625,11 +600,13 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
                       child: Stack(children: [
                         CachedNetworkImage(
                           imageUrl: "$baseUrl/${moduleList![position].image}",
-                          placeholder: (context, url) => const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         ),
 
-                      /*  Image.network(
+                        /*  Image.network(
                           "$baseUrl/${moduleList![position].image}",
                           height: double.infinity,
                           width: double.infinity,
@@ -655,4 +632,254 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
       ),
     );
   }
+}
+
+class WithoutSign extends StatefulWidget {
+  WithoutSign({super.key});
+
+  @override
+  WithoutSignState createState() => WithoutSignState();
+}
+
+class WithoutSignState extends State<WithoutSign> {
+  List<CourseData>? courseList;
+
+  @override
+  void initState() {
+    super.initState();
+  checkForPref();
+  }
+  checkForPref() async {
+    String token = await Common.getPreferences("token");
+
+    callCoursesApi();
+  }
+
+
+  callCoursesApi() {
+    dashboardViewModel.fetchAllCoursesData(context).then((value) {
+      if (value.status.toString() == "true") {
+        setState(() {
+         courseList = value.courseData;
+        });
+      } else {
+        Common.showToast("something went wrong", "red");
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Common.colorAccent,
+          statusBarIconBrightness: Brightness.light,
+        ),
+        child: Scaffold(
+          extendBody: true,
+            appBar:  AppBar(
+            backgroundColor: Common.colorAccent,
+
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {},
+                child: Text(Customstrings.signin,
+                style: const TextStyle(color: Colors.white,fontFamily: 'PoppinMedium',fontSize: 18.0),
+                ),
+              ),
+            ],
+            title: Image.asset(
+              'assets/images/splashlogo.png',
+              height: 50,
+              width: 50,
+            ),
+            centerTitle: true,
+          ),
+          body: SingleChildScrollView(
+      child : Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CarouselSlider(
+            items: [
+              Container(
+                margin: const EdgeInsets.all(6.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: const DecorationImage(
+                    image: AssetImage("assets/images/subrectone.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(6.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: const DecorationImage(
+                    image: AssetImage("assets/images/recttwo.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )
+            ],
+
+            //Slider Container properties
+            options: CarouselOptions(
+              height: 200.0,
+              enlargeCenterPage: true,
+              autoPlay: true,
+              aspectRatio: 16 / 9,
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enableInfiniteScroll: true,
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              viewportFraction: 0.8,
+            ),
+          ),
+          Container(
+              width: double.infinity,
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: const [
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: TextWidget(
+                          text: Customstrings.companyName,
+                          txtColor: Common.txtColor,
+                          fontFamily: "PoppinBold",
+                          fontSize: 24.0,
+                          textAlign: TextAlign.left)),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: TextWidget(
+                        text:
+                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                        txtColor: Common.txtColor,
+                        fontFamily: "PoppinRegular",
+                        fontSize: 16.0,
+                        textAlign: TextAlign.left),
+                  ),
+
+                  SizedBox(
+                    height: 25,
+                  ),
+
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: TextWidget(
+                        text:
+                        'Our Courses : ',
+                        txtColor: Common.txtColor,
+                        fontFamily: "PoppinBold",
+                        fontSize: 20.0,
+                        textAlign: TextAlign.left),
+                  ),
+                ],
+
+              )),
+
+          SizedBox(height : 280,
+              width: double.infinity,
+              child:getCourseList())
+
+
+
+
+        ],
+      )
+    )
+
+        ));
+  }
+  Widget getCourseList() {
+    return  ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+          itemCount: courseList?.length ?? 0,
+          itemBuilder: (context, position) {
+            return   Container(
+              width: 300,
+              padding: EdgeInsets.all(10),
+              child:  InkWell(
+                  onTap: () {
+
+                  },
+                  child: SizedBox(
+                      height: double.infinity,
+                      width: double.infinity,
+                      child:
+                      Column(
+                        children: [
+                          Expanded(child:  Card(
+                              color: Colors.white,
+                              semanticContainer: true,
+                              clipBehavior:
+                              Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10.0),
+                              ),
+                              elevation: 5,
+                              child: Stack(children: [
+                                Image.asset(
+                                  'assets/images/rectone.png',
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color:
+                                    Colors.black.withOpacity(.30),
+                                    height: 30,
+                                    width: double.infinity,
+                                    child: Text(
+                                      Customstrings.grtraining,
+                                      style: const TextStyle(
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ]))),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                              margin: const EdgeInsets.only(left: 5),
+                              alignment: Alignment.topLeft,
+                              child: const TextWidget(
+                                  text: 'Lorem Ipsum is simply',
+                                  txtColor: Common.txtColor,
+                                  fontFamily: "PoppinBold",
+                                  fontSize: 14.0,
+                                  textAlign: TextAlign.left)),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 5),
+                            child: const TextWidget(
+                                text:
+                                'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                txtColor: Common.txtColor,
+                                fontFamily: "PoppinRegular",
+                                fontSize: 10.0,
+                                textAlign: TextAlign.left),
+                          ),
+
+                        ],
+                      )
+
+                  )),
+            );
+          },
+        );
+  }
+
+
 }

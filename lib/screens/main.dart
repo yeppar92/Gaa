@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:daa/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'splash.dart';
@@ -16,7 +19,7 @@ void main() async{
 }
 
 class myApp extends StatelessWidget {
-
+  StreamController<bool> streamController = StreamController<bool>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,6 +32,6 @@ class myApp extends StatelessWidget {
 
           ),
         ),
-        home: Scaffold(body: Splash()));
+        home: Scaffold(body: Dashboard(streamController,streamController.stream)));
   }
 }

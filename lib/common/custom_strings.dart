@@ -1,5 +1,5 @@
 class Customstrings {
-  static String companyName = "Gulf Aviation Academy";
+  static const String companyName = "Gulf Aviation Academy";
   static String email = "Email Adress";
   static String pass = "Password";
   static String cpass = "Confirm Password";
@@ -9,7 +9,7 @@ class Customstrings {
   static String forgot = "Forgot Password";
   static String grtraining = "Ground Training";
   static String comingsoon = "Coming Soon";
-  static String appname = "GAA";
+  static const String appname = "GAA";
   static String marshal = "Marshalling";
   static String signin = "Sign In";
   static String verification = "Verificatoin";

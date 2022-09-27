@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:daa/common/custom_strings.dart';
+import 'package:daa/database/database_handler.dart';
 import 'package:daa/screens/%20login/login_view_model.dart';
 import 'package:daa/screens/forgot_pass.dart';
 import 'package:daa/widgets/text_widget.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../common/api_services.dart';
 import '../../common/common.dart';
@@ -27,8 +29,8 @@ class LoginState extends State<Login1> {
   var _passwordVisible = true, status = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-
   LoginViewModel loginViewModel = LoginViewModel();
+  Database? database;
   @override
   void initState() {
     super.initState();
@@ -60,6 +62,11 @@ class LoginState extends State<Login1> {
 
   callSignInApi() {
     loginViewModel.fetchLoginData(context,emailController.text, passController.text);
+  }
+
+  Future<Database?> openDB() async {
+   database = await DatabaseHandler().openDB();
+   return database;
   }
 
   @override

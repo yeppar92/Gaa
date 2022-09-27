@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:daa/common/common.dart';
+import 'package:daa/models/all_courses_model.dart';
 import 'package:daa/models/login_model.dart';
 import 'package:daa/models/sub_modules_model.dart';
 import 'package:dio/dio.dart';
@@ -39,6 +40,16 @@ class ApiServices {
     print('modules Info: ${moduleData.data}');
     SubModulesModel subModulesModel = SubModulesModel.fromJson(moduleData.data);
     return subModulesModel;
+  }
+
+  // for get all courses api
+  Future<AllCoursesModel> getAllCourses() async {
+    var url = Uri.parse('${Common.mainurl}allcourses');
+    print(url);
+    Response moduleData = await _dio.get(url.toString());
+    print('modules Info: ${moduleData.data}');
+    AllCoursesModel allCoursesModel = AllCoursesModel.fromJson(moduleData.data);
+    return allCoursesModel;
   }
 
 
