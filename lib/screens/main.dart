@@ -14,12 +14,14 @@ void main() async{
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) {
-    runApp(new myApp());
+    runApp(myApp());
   });
 }
 
 class myApp extends StatelessWidget {
   StreamController<bool> streamController = StreamController<bool>();
+
+  myApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,11 +29,11 @@ class myApp extends StatelessWidget {
         title: "DAA",
 
         theme: ThemeData(
-          textSelectionTheme: TextSelectionThemeData(
+          textSelectionTheme: const TextSelectionThemeData(
             cursorColor: Colors.white,
 
           ),
         ),
-        home: Scaffold(body: Dashboard(streamController,streamController.stream)));
+        home: const Scaffold(body: Splash()));
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:daa/common/api_services.dart';
+import 'package:daa/common/custom_strings.dart';
 import 'package:daa/models/login_model.dart';
 import 'package:daa/screens/%20login/login_repo.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,9 +21,11 @@ class LoginViewModel with ChangeNotifier {
      if (apiResult.status == true) {
        print("response login >>>>>> ${apiResult.message}");
        Common.SetPreferences("token", apiResult.token.toString());
+       Common.SetPreferences("login", "true");
+       Common.SetPreferences("username", apiResult.userDetail!.userName.toString());
        Navigator.of(context).pushReplacement(MaterialPageRoute(
            builder: (BuildContext context) =>
-               Dashboard(streamController, streamController.stream)));
+               Dashboard(streamController, streamController.stream,apiResult.userDetail!.userName.toString())));
      } else {
        Common.showToast("Please check your credentials", "red");
      }

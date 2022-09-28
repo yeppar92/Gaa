@@ -1,4 +1,5 @@
 
+import 'package:daa/common/custom_strings.dart';
 import 'package:daa/screens/%20login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,16 +41,25 @@ class _SplashState extends State<Splash>{
     }
 
     String checkLogin = await Common.getPreferences("login");
+    String userName = await Common.getPreferences("username");
     Timer(
         const Duration(seconds: 5),
             () {
-          if (checkLogin == "true") {
+
+              if (checkLogin == "true") {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => Dashboard(streamController,streamController.stream,userName)));
+              } else {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => Dashboard(streamController,streamController.stream,Customstrings.signin)));
+              }
+       /*   if (checkLogin == "true") {
              Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => Dashboard(streamController,streamController.stream)));
           } else {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => const Login1()));
-          }
+          }*/
         }
     );
     

@@ -12,6 +12,7 @@ class Customstrings {
   static const String appname = "GAA";
   static String marshal = "Marshalling";
   static String signin = "Sign In";
+  static String loggedin = "Logged In";
   static String verification = "Verificatoin";
   static String conti = "Continue";
   static String resetpass = "Reset Password";
@@ -29,6 +30,10 @@ class Customstrings {
   static const String desktopVr = "Mobile VR";
   static const String mobileAr = "Mobile AR";
   static const String nointernet = "No Internet Connection";
+  static const String yes = "Yes";
+  static const String no = "No";
+  static const String logout = "Logout";
+  static const String logouttitle = "Are you sure you want to logout?";
 
 
 

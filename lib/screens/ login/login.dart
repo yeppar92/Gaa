@@ -43,7 +43,6 @@ class LoginState extends State<Login1> {
     emailController.dispose();
     passController.dispose();
     loginViewModel.dispose();
-
   }
 
   checkForPref() async {}
@@ -76,7 +75,12 @@ class LoginState extends State<Login1> {
           statusBarColor: Common.colorAccent,
           statusBarIconBrightness: Brightness.light,
         ),
-        child: Scaffold(
+        child:  WillPopScope(
+        onWillPop: () async {
+          SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
+        return false;
+        },
+      child: Scaffold(
           body: Container(
               width: double.infinity,
               height: double.infinity,
@@ -237,6 +241,6 @@ class LoginState extends State<Login1> {
                       ],
                     ))
               ])),
-        ));
+        )));
   }
 }

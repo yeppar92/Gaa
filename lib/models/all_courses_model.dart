@@ -1,6 +1,7 @@
 class AllCoursesModel {
   String? message;
   String? status;
+  String? baseUrl;
   List<CourseData>? courseData;
 
   AllCoursesModel({this.message, this.status, this.courseData});
@@ -8,6 +9,7 @@ class AllCoursesModel {
   AllCoursesModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     status = json['status'];
+    baseUrl = json['base_url'];
     if (json['data'] != null) {
       courseData = <CourseData>[];
       json['data'].forEach((v) {
@@ -20,6 +22,7 @@ class AllCoursesModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['message'] = message;
     data['status'] = status;
+    data['base_url'] = baseUrl;
     if (courseData != null) {
       data['data'] = courseData!.map((v) => v.toJson()).toList();
     }
@@ -79,7 +82,7 @@ class CourseData {
     data['title'] = title;
     data['code'] = code;
     data['slug'] = slug;
-    data['description'] = this.description;
+    data['description'] = description;
     data['content'] = content;
     data['image'] = image;
     data['logo'] = logo;
