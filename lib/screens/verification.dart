@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 
 import '../common/common.dart';
+import '../common/custom_colors.dart';
+import '../widgets/rounded_button.dart';
+import '../widgets/text_widget.dart';
 import 'dashboard/dashboard.dart';
 
 
@@ -54,7 +57,11 @@ class VerificationState extends State<Verification> {
             body: Container(
               width: double.infinity,
               height: double.infinity,
-              color: Common.colorAccent,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/back.jpg"),
+                    fit: BoxFit.cover),
+              ),
               child:
     CustomScrollView(slivers: [
     SliverFillRemaining(
@@ -86,30 +93,27 @@ class VerificationState extends State<Verification> {
                         child: Column(
                           children: [
                             const SizedBox(height: 10,),
-                            Text(
-                              Customstrings.verification,
-                              style: const TextStyle(
-                                  color: Common.txtColor,
-                                  fontSize: 24,
-                                  fontFamily: 'PoppinBold'),
-                            ),
+                            TextWidget(
+                                text: Customstrings.verification,
+                                txtColor: CustomColors.colorHeader,
+                                fontFamily: "PoppinBold",
+                                fontSize: 24.0,
+                                textAlign: TextAlign.left),
                             const SizedBox(height: 10,),
-                            Text(
-                              Customstrings.sent_code_email,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: Common.txtColor,
-                                  fontSize: 16,
-                                  fontFamily: 'PoppinRegular'),
-                            ),
-                            const Text(
-                              'av@gmail.com',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Common.txtColor,
-                                  fontSize: 16,
-                                  fontFamily: 'PoppinRegular'),
-                            ),
+                            TextWidget(
+                                text: Customstrings.sent_code_email,
+                                txtColor: Common.txtColor,
+                                fontFamily: "PoppinRegular",
+                                fontSize: 16.0,
+                                textAlign: TextAlign.center),
+
+                            const TextWidget(
+                                text: 'av@gmail.com',
+                                txtColor: Common.txtColor,
+                                fontFamily: "PoppinRegular",
+                                fontSize: 16.0,
+                                textAlign: TextAlign.center),
+
                             const SizedBox(height: 20,),
                             PinCodeFields(
                               length: 4,
@@ -152,7 +156,7 @@ class VerificationState extends State<Verification> {
                                     TextSpan(
                                         text: Customstrings.resend,
                                         style: const TextStyle(
-                                          color: Common.colorAccent,
+                                          color: CustomColors.colorHeader,
                                           fontFamily: 'PoppinRegular',
                                           fontSize: 14,
                                           decoration: TextDecoration.underline,
@@ -172,36 +176,19 @@ class VerificationState extends State<Verification> {
                               margin: const EdgeInsets.only(top: 30,bottom: 60),
                               height: 50,
                               width: double.infinity,
-                              child: TextButton(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                    MaterialStateColor.resolveWith(
-                                            (states) =>
-                                        Common.colorAccent),
-                                    overlayColor:
-                                    MaterialStateColor.resolveWith(
-                                            (states) =>
-                                        Common.rippleColor),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(30.0),
-                                          side: const BorderSide(
-                                              color: Common.colorAccent),
-                                        ))),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-
-                                child: Text(
-                                  Customstrings.verify_otp,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontFamily: 'PoppinMedium'),
-                                ),
-                              ),
+                              child: RoundedButton(
+                                  onPressed: ()  {
+                                    Navigator.of(context).pop();
+                                  },
+                                  textColor: Colors.white,
+                                  btnColor: Common.colorAccent,
+                                  rippleColor:
+                                  Colors.white.withOpacity(.20),
+                                  borderColor: Common.colorAccent,
+                                  text: Customstrings.verify_otp,
+                                  height: 50.0,
+                                  width: double.infinity,
+                                  circularSize: 30.0)
                             ),
                           ],
                         ),

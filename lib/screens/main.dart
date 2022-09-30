@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:daa/screens/%20login/login.dart';
 import 'package:daa/screens/dashboard/dashboard.dart';
+import 'package:daa/screens/forgot_pass.dart';
+import 'package:daa/screens/reset_pass.dart';
+import 'package:daa/screens/verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'splash.dart';
@@ -34,6 +38,6 @@ class myApp extends StatelessWidget {
 
           ),
         ),
-        home: const Scaffold(body: Splash()));
+        home: const Scaffold(body: Login1()));
   }
 }

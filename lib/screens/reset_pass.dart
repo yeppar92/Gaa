@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../common/common.dart';
+import '../common/custom_colors.dart';
+import '../widgets/rounded_button.dart';
+import '../widgets/text_field_widget.dart';
+import '../widgets/text_widget.dart';
 import 'dashboard/dashboard.dart';
 import 'verification.dart';
 
@@ -15,13 +19,13 @@ class Resetpass extends StatefulWidget {
 }
 
 class ResetState extends State<Resetpass> {
-  var _passwordVisible = false, _cpasswordVisible;
+  var _passwordVisible = true, _cpasswordVisible = true;
+  TextEditingController passController = TextEditingController();
+  TextEditingController cpassController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _passwordVisible = false;
-    _cpasswordVisible = false;
     checkForPref();
   }
 
@@ -31,7 +35,7 @@ class ResetState extends State<Resetpass> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
-          statusBarColor: Common.colorAccent,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,
         ),
         child: Scaffold(
@@ -49,7 +53,11 @@ class ResetState extends State<Resetpass> {
           body: Container(
             width: double.infinity,
             height: double.infinity,
-            color: Common.colorAccent,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/back.jpg"),
+                  fit: BoxFit.cover),
+            ),
             child: CustomScrollView(slivers: [
               SliverFillRemaining(
                   hasScrollBody: false,
@@ -80,143 +88,87 @@ class ResetState extends State<Resetpass> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text(
-                                Customstrings.resetpass,
-                                style: const TextStyle(
-                                    color: Common.txtColor,
-                                    fontSize: 24,
-                                    fontFamily: 'PoppinBold'),
-                              ),
+                              TextWidget(
+                                  text: Customstrings.resetpass,
+                                  txtColor: CustomColors.colorHeader,
+                                  fontFamily: "PoppinBold",
+                                  fontSize: 24.0,
+                                  textAlign: TextAlign.left),
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text(
-                                Customstrings.pass_valid,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    color: Common.txtColor,
-                                    fontSize: 16,
-                                    fontFamily: 'PoppinRegular'),
-                              ),
+                              TextWidget(
+                                  text: Customstrings.pass_valid,
+                                  txtColor: Common.txtColor,
+                                  fontFamily: "PoppinRegular",
+                                  fontSize: 16.0,
+                                  textAlign: TextAlign.center),
                               const SizedBox(
                                 height: 40,
                               ),
-                              TextField(
-                                cursorColor: Common.txtColor,
-                                style: const TextStyle(
-                                  color: Common.txtColor,
-                                ),
-                                obscureText: !_passwordVisible,
-                                decoration: InputDecoration(
-                                  fillColor: Common.list_divider,
-                                  filled: true,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  hintText: " ${Customstrings.pass}",
-                                  counterText: "",
-                                  hintStyle: const TextStyle(
-                                    color: Common.hintColor,
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                        _passwordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Common.hintColor),
-                                    onPressed: () {
-                                      // Update the state i.e. toogle the state of passwordVisible variable
-                                      setState(() {
-                                        _passwordVisible = !_passwordVisible;
-                                      });
-                                    },
-                                  ),
-                                ),
+                              TextFieldWidget(
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                                },
+                                controller: passController,
+                                cursorColor: CustomColors.colorWhite,
+                                fillColor: CustomColors.colorTextField,
+                                hintTxt: Customstrings.pass,
+                                txtColor: CustomColors.colorWhite,
+                                hintColor: CustomColors.colorWhite,
+                                enableColor: Colors.white,
+                                focusColor: Colors.white,
+                                obsucureTxt: _passwordVisible,
+                                checkPass: true,
+                                circularSize: 30.0,
+                                height: 50.0,
+                                width: double.infinity,
                               ),
                               const SizedBox(
                                 height: 25,
                               ),
-                              TextField(
-                                cursorColor: Common.txtColor,
-                                style: const TextStyle(
-                                  color: Common.txtColor,
-                                ),
-                                obscureText: !_cpasswordVisible,
-                                decoration: InputDecoration(
-                                  fillColor: Common.list_divider,
-                                  filled: true,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  hintText: " ${Customstrings.cpass}",
-                                  counterText: "",
-                                  hintStyle: const TextStyle(
-                                    color: Common.hintColor,
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                        _cpasswordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Common.hintColor),
-                                    onPressed: () {
-                                      // Update the state i.e. toogle the state of passwordVisible variable
-                                      setState(() {
-                                        _cpasswordVisible =
-                                            !_cpasswordVisible;
-                                      });
-                                    },
-                                  ),
-                                ),
+                              TextFieldWidget(
+                                onPressed: () {
+                                  setState(() {
+                                    _cpasswordVisible = !_cpasswordVisible;
+                                  });
+                                },
+                                controller: cpassController,
+                                cursorColor: CustomColors.colorWhite,
+                                fillColor: CustomColors.colorTextField,
+                                hintTxt: Customstrings.cpass,
+                                txtColor: CustomColors.colorWhite,
+                                hintColor: CustomColors.colorWhite,
+                                enableColor: Colors.white,
+                                focusColor: Colors.white,
+                                obsucureTxt: _cpasswordVisible,
+                                checkPass: true,
+                                circularSize: 30.0,
+                                height: 50.0,
+                                width: double.infinity,
                               ),
                               Container(
                                 margin: const EdgeInsets.only(top: 30, bottom: 60),
                                 height: 50,
                                 width: double.infinity,
-                                child: TextButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateColor.resolveWith(
-                                              (states) => Common.colorAccent),
-                                      overlayColor:
-                                          MaterialStateColor.resolveWith(
-                                              (states) => Common.rippleColor),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        side: const BorderSide(
-                                            color: Common.colorAccent),
-                                      ))),
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                const Verification()));
-                                  },
-                                  child: Text(
-                                    Customstrings.conti,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontFamily: 'PoppinMedium'),
-                                  ),
-                                ),
+                                child:  RoundedButton(
+                                    onPressed: ()  {
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                              const Verification()));
+                                    },
+                                    textColor: Colors.white,
+                                    btnColor: Common.colorAccent,
+                                    rippleColor:
+                                    Colors.white.withOpacity(.20),
+                                    borderColor: Common.colorAccent,
+                                    text: Customstrings.conti,
+                                    height: 50.0,
+                                    width: double.infinity,
+                                    circularSize: 30.0),
                               ),
                             ],
                           ),

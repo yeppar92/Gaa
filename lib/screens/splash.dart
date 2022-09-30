@@ -75,13 +75,19 @@ class _SplashState extends State<Splash>{
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
-          statusBarColor: Common.colorAccent,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,
         ),
 
         child : Scaffold(
-          body: Container(
-              color: Common.colorAccent,
+          extendBodyBehindAppBar: true,
+
+            body: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/back.jpg"),
+                    fit: BoxFit.cover),
+              ),
               alignment: Alignment.center,
               child: Center(
                 child: Container(

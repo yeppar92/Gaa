@@ -70,7 +70,7 @@ class TextFieldWidget extends StatelessWidget{
 
         suffixIcon: checkPass?IconButton(
           icon: Icon(
-              obsucureTxt
+              !obsucureTxt
                   ? Icons.visibility
                   : Icons.visibility_off,
               color: hintColor),

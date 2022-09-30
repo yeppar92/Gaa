@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../common/common.dart';
+import '../common/custom_colors.dart';
+import '../widgets/rounded_button.dart';
+import '../widgets/text_field_widget.dart';
+import '../widgets/text_widget.dart';
 import 'dashboard/dashboard.dart';
 
 
@@ -17,7 +21,7 @@ class Forgotpass extends StatefulWidget {
 }
 
 class ForgotState extends State<Forgotpass> {
-
+ TextEditingController emailController = TextEditingController();
 
   @override
   void initState() {
@@ -36,12 +40,12 @@ class ForgotState extends State<Forgotpass> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
-          statusBarColor: Common.colorAccent,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,
 
         ),
         child: Scaffold(
-            appBar: AppBar(
+          appBar: AppBar(
               centerTitle: true,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -55,7 +59,11 @@ class ForgotState extends State<Forgotpass> {
             body: Container(
               width: double.infinity,
               height: double.infinity,
-              color: Common.colorAccent,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/back.jpg"),
+                    fit: BoxFit.cover),
+              ),
               child:
     CustomScrollView(slivers: [
     SliverFillRemaining(
@@ -86,51 +94,36 @@ class ForgotState extends State<Forgotpass> {
                          padding: const EdgeInsets.all(20),
                         child: Column(
                           children: [
-                            SizedBox(height: 10,),
-                            Text(
-                              Customstrings.forgot,
-                              style: const TextStyle(
-                                  color: Common.txtColor,
-                                  fontSize: 24,
-                                  fontFamily: 'PoppinBold'),
-                            ),
                             const SizedBox(height: 10,),
-                            Text(
-                              Customstrings.forgot_email,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: Common.txtColor,
-                                  fontSize: 16,
-                                  fontFamily: 'PoppinRegular'),
-                            ),
+                            TextWidget(
+                                text: Customstrings.forgot,
+                                txtColor: CustomColors.colorHeader,
+                                fontFamily: "PoppinBold",
+                                fontSize: 24.0,
+                                textAlign: TextAlign.left),
+                            const SizedBox(height: 10,),
+                            TextWidget(
+                                text: Customstrings.forgot_email,
+                                txtColor: Common.txtColor,
+                                fontFamily: "PoppinRegular",
+                                fontSize: 16.0,
+                                textAlign: TextAlign.center),
                             const SizedBox(height: 40,),
-                            SizedBox(
-                              height: 50,
-                              child: TextField(
-                                cursorColor: Common.txtColor,
-                                keyboardType: TextInputType.emailAddress,
-                                maxLength: 10,
-                                style : const TextStyle(
-                                  color: Colors.black,
-                                ),
-                                decoration: InputDecoration(
-                                  fillColor: Common.list_divider,
-                                  filled: true,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color:Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  hintText: " ${Customstrings.email}",
-                                  counterText: "",
-                                  hintStyle: const TextStyle(
-                                    color: Common.hintColor,
-                                  ),
-                                ),
-                              ),
+                            TextFieldWidget(
+                              onPressed: () => print("email"),
+                              controller: emailController,
+                              cursorColor: CustomColors.colorWhite,
+                              fillColor: CustomColors.colorTextField,
+                              hintTxt: Customstrings.email,
+                              txtColor: CustomColors.colorWhite,
+                              hintColor: CustomColors.colorWhite,
+                              enableColor: Colors.white,
+                              focusColor: Colors.white,
+                              obsucureTxt: false,
+                              checkPass: false,
+                              circularSize: 30.0,
+                              height: 50.0,
+                              width: double.infinity,
                             ),
 
 
@@ -139,37 +132,21 @@ class ForgotState extends State<Forgotpass> {
                               margin: const EdgeInsets.only(top: 30,bottom: 100),
                               height: 50,
                               width: double.infinity,
-                              child: TextButton(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                    MaterialStateColor.resolveWith(
-                                            (states) =>
-                                        Common.colorAccent),
-                                    overlayColor:
-                                    MaterialStateColor.resolveWith(
-                                            (states) =>
-                                        Common.rippleColor),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(30.0),
-                                          side: const BorderSide(
-                                              color: Common.colorAccent),
-                                        ))),
-                                onPressed: () {
-                                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                      builder: (BuildContext context) => const Resetpass()));
-                                },
+                              child:  RoundedButton(
+                                  onPressed: ()  {
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                        builder: (BuildContext context) => const Resetpass()));
+                                  },
+                                  textColor: Colors.white,
+                                  btnColor: Common.colorAccent,
+                                  rippleColor:
+                                  Colors.white.withOpacity(.20),
+                                  borderColor: Common.colorAccent,
+                                  text: Customstrings.conti,
+                                  height: 50.0,
+                                  width: double.infinity,
+                                  circularSize: 30.0)
 
-                                child: Text(
-                                  Customstrings.conti,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontFamily: 'PoppinMedium'),
-                                ),
-                              ),
                             ),
                           ],
                         ),

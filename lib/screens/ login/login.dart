@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:daa/common/custom_colors.dart';
 import 'package:daa/common/custom_strings.dart';
 import 'package:daa/database/database_handler.dart';
 import 'package:daa/screens/%20login/login_view_model.dart';
@@ -72,7 +73,7 @@ class LoginState extends State<Login1> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
-          statusBarColor: Common.colorAccent,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,
         ),
         child:  WillPopScope(
@@ -81,10 +82,15 @@ class LoginState extends State<Login1> {
         return false;
         },
       child: Scaffold(
+        extendBodyBehindAppBar: true,
           body: Container(
               width: double.infinity,
               height: double.infinity,
-              color: Common.colorAccent,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/back.jpg"),
+                    fit: BoxFit.cover),
+              ),
               child: CustomScrollView(slivers: [
                 SliverFillRemaining(
                     hasScrollBody: false,
@@ -115,7 +121,7 @@ class LoginState extends State<Login1> {
                                 ),
                                 TextWidget(
                                     text: Customstrings.signin,
-                                    txtColor: Common.txtColor,
+                                    txtColor: CustomColors.colorHeader,
                                     fontFamily: "PoppinBold",
                                     fontSize: 24.0,
                                     textAlign: TextAlign.left),
@@ -134,11 +140,11 @@ class LoginState extends State<Login1> {
                                 TextFieldWidget(
                                   onPressed: () => print("username"),
                                   controller: emailController,
-                                  cursorColor: Common.txtColor,
-                                  fillColor: Common.list_divider,
+                                  cursorColor: CustomColors.colorWhite,
+                                  fillColor: CustomColors.colorTextField,
                                   hintTxt: Customstrings.email,
-                                  txtColor: Common.txtColor,
-                                  hintColor: Common.hintColor,
+                                  txtColor: CustomColors.colorWhite,
+                                  hintColor: CustomColors.colorWhite,
                                   enableColor: Colors.white,
                                   focusColor: Colors.white,
                                   obsucureTxt: false,
@@ -157,11 +163,11 @@ class LoginState extends State<Login1> {
                                     });
                                   },
                                   controller: passController,
-                                  cursorColor: Common.txtColor,
-                                  fillColor: Common.list_divider,
+                                  cursorColor: CustomColors.colorWhite,
+                                  fillColor: CustomColors.colorTextField,
                                   hintTxt: Customstrings.pass,
-                                  txtColor: Common.txtColor,
-                                  hintColor: Common.hintColor,
+                                  txtColor: CustomColors.colorWhite,
+                                  hintColor: CustomColors.colorWhite,
                                   enableColor: Colors.white,
                                   focusColor: Colors.white,
                                   obsucureTxt: _passwordVisible,
@@ -183,7 +189,7 @@ class LoginState extends State<Login1> {
                                         TextSpan(
                                             text: Customstrings.forgot,
                                             style: const TextStyle(
-                                              color: Common.colorAccent,
+                                              color: CustomColors.colorHeader,
                                               fontFamily: 'PoppinRegular',
                                               fontSize: 12,
                                               decoration:
