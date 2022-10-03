@@ -8,6 +8,7 @@ import 'package:daa/common/common.dart';
 import 'package:daa/common/custom_strings.dart';
 import 'package:daa/models/all_courses_model.dart';
 import 'package:daa/screens/dashboard/dashboard_view_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,6 +16,7 @@ import '../ login/login.dart';
 import '../../common/api_services.dart';
 import '../../models/sub_modules_model.dart';
 import '../../widgets/text_widget.dart';
+import '../fragments/profile.dart';
 import '../module_detail.dart';
 
 var courseVisible = true,
@@ -41,7 +43,9 @@ class DashState extends State<Dashboard> {
   var checkForBack = false;
 
   final pages = [
-    WithoutSign()
+    WithoutSign(),
+    const Profile(),
+    const Profile()
     //HomeWork(streamController1.stream),
   ];
 
@@ -141,8 +145,8 @@ class DashState extends State<Dashboard> {
                                 unselectedLabelStyle: textTheme.caption,
                                 onTap: (value) {
                                   setState(() {
-                                    //pageIndex = value;
-                                    pageIndex = 0;
+                                    pageIndex = value;
+                                   // pageIndex = 0;
                                   });
                                 },
                                 items: const [

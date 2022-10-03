@@ -21,6 +21,9 @@ class DatabaseHandler{
   Future<Database?> openDB() async{
    database = await openDatabase(
      join(await getDatabasesPath(),'gaa.db')
+
+
+
    );
    return database;
 

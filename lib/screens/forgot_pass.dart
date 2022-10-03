@@ -112,6 +112,8 @@ class ForgotState extends State<Forgotpass> {
                             TextFieldWidget(
                               onPressed: () => print("email"),
                               controller: emailController,
+                              textInputType: TextInputType.emailAddress,
+                              maxLength: 100,
                               cursorColor: CustomColors.colorWhite,
                               fillColor: CustomColors.colorTextField,
                               hintTxt: Customstrings.email,
@@ -121,6 +123,8 @@ class ForgotState extends State<Forgotpass> {
                               focusColor: Colors.white,
                               obsucureTxt: false,
                               checkPass: false,
+                              checkPrefix: false,
+                              assetUrl: '',
                               circularSize: 30.0,
                               height: 50.0,
                               width: double.infinity,

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class TextFieldWidget extends StatelessWidget{
   final VoidCallback onPressed;
   final TextEditingController controller;
+  final TextInputType textInputType;
+  final int maxLength;
   final Color cursorColor;
   final Color fillColor;
   final Color txtColor;
@@ -12,6 +14,8 @@ class TextFieldWidget extends StatelessWidget{
   final Color focusColor;
   final  bool obsucureTxt;
   final  bool checkPass;
+  final  bool checkPrefix;
+  final  String assetUrl;
   final double circularSize;
   final double height;
   final double width;
@@ -19,6 +23,8 @@ class TextFieldWidget extends StatelessWidget{
   const TextFieldWidget({super.key,
     required this.onPressed,
     required this.controller,
+    required this.textInputType,
+    required this.maxLength,
     required this.cursorColor,
     required this.fillColor,
     required this.txtColor,
@@ -28,6 +34,8 @@ class TextFieldWidget extends StatelessWidget{
     required this.focusColor,
     required this.obsucureTxt,
     required this.checkPass,
+    required this.checkPrefix,
+    required this.assetUrl,
     required this.circularSize,
     required this.height,
     required this.width});
@@ -42,7 +50,8 @@ class TextFieldWidget extends StatelessWidget{
       controller: controller,
       cursorColor: cursorColor,
       obscureText: obsucureTxt,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: textInputType,
+      maxLength: maxLength,
       style:  TextStyle(
         color: txtColor,
       ),
@@ -60,6 +69,7 @@ class TextFieldWidget extends StatelessWidget{
               color:focusColor),
           borderRadius:
           BorderRadius.circular(circularSize),
+
         ),
         hintText: " $hintTxt",
         counterText: "",
@@ -77,6 +87,12 @@ class TextFieldWidget extends StatelessWidget{
           onPressed: () => onPressed.call()
         ):null,
 
+          prefixIcon:  checkPrefix?Image.asset(
+            assetUrl,
+            width: 10,
+            height: 10,
+
+          ):null
       ),
     ));
   }

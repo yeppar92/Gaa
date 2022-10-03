@@ -1,6 +1,6 @@
 class Customstrings {
   static const String companyName = "Gulf Aviation Academy";
-  static String email = "Email Adress";
+  static const String email = "Email Adress";
   static String pass = "Password";
   static String cpass = "Confirm Password";
   static String login = "Login";
@@ -34,6 +34,16 @@ class Customstrings {
   static const String no = "No";
   static const String logout = "Logout";
   static const String logouttitle = "Are you sure you want to logout?";
+  static const String name = "Name";
+  static const String phoneno = "Phone number";
+  static const String company = "Company";
+  static const String country = "Country";
+  static const String proSetting = "Profile Setting";
+  static const String proHistory = "Profile History";
+  static const String payMathods = "Payment Methods";
+  static const String changePass = "Change Password";
+
+
 
 
 
