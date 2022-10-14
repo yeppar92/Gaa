@@ -7,7 +7,7 @@ class Customstrings {
   static String donthave =  "Don't have an account?";
   static String joinhere = "Join Here";
   static String forgot = "Forgot Password";
-  static String grtraining = "Ground Training";
+  static const String grtraining = "Ground Training";
   static String comingsoon = "Coming Soon";
   static const String appname = "GAA";
   static String marshal = "Marshalling";
@@ -42,6 +42,25 @@ class Customstrings {
   static const String proHistory = "Profile History";
   static const String payMathods = "Payment Methods";
   static const String changePass = "Change Password";
+  static const String courseSubtitle = "The Gulf Aviation Academy is leading the way in the provision of high quality aviation training within the MENA region.";
+  static const String licenseRegisterDate = "LICENSE REGISTRATION";
+  static const String licenseExpiryDate = "LICENSE";
+  static const String date = "DATE";
+  static const String expirydate = "EXPIRY DATE";
+  static const String assignedCourse = "Assigned Course";
+  static const String assignedModule = "Assigned Modules";
+  static const String trainingAttempt = "Training Attemptes";
+  static const String evalutionAttempt = "Evaluation Attemptes";
+  static const String report = "REPORTS";
+  static const String course = "Course";
+  static const String module = "Module";
+  static const String appType = "Application Type";
+  static const String lastEvalutionScore = "Last Evalution Score";
+  static const String certificate = "Certificate";
+
+
+
+
 
 
 

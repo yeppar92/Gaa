@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:daa/common/common.dart';
 import 'package:daa/models/all_courses_model.dart';
 import 'package:daa/models/login_model.dart';
+import 'package:daa/models/reset_pass_model.dart';
 import 'package:daa/models/sub_modules_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,6 +51,17 @@ class ApiServices {
     print('modules Info: ${moduleData.data}');
     AllCoursesModel allCoursesModel = AllCoursesModel.fromJson(moduleData.data);
     return allCoursesModel;
+  }
+
+
+  // for reset password api
+  Future<ResetPassModel> resetPassword(String email) async {
+    var url = Uri.parse('${Common.mainurl}reset');
+    print(url);
+    Response moduleData = await _dio.get("$url?email=$email");
+    print('modules Info: ${moduleData.data}');
+    ResetPassModel resetPassModel = ResetPassModel.fromJson(moduleData.data);
+    return resetPassModel;
   }
 
 

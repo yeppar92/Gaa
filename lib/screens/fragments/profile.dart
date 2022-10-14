@@ -16,6 +16,11 @@ class Profile extends StatefulWidget {
 
 class ProfileState extends State<Profile> {
   TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController companyController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +54,7 @@ class ProfileState extends State<Profile> {
                 extendBody: true,
                 extendBodyBehindAppBar: true,
                 appBar : AppBar(
+                  automaticallyImplyLeading: false,
                   backgroundColor: Colors.transparent,
                   title: Text(''),
                   centerTitle: true,
@@ -68,7 +74,7 @@ class ProfileState extends State<Profile> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Container(
-                            margin: EdgeInsets.only(top: 40),
+                            margin: const EdgeInsets.only(top: 40),
                             height: 140,
                             width: 140,
                             child: CircleAvatar(
@@ -143,7 +149,7 @@ class ProfileState extends State<Profile> {
 
                             });
                           },
-                          controller: nameController,
+                          controller: emailController,
                           textInputType: TextInputType.emailAddress,
                           maxLength: 100,
                           cursorColor: CustomColors.colorWhite,
@@ -168,7 +174,7 @@ class ProfileState extends State<Profile> {
 
                             });
                           },
-                          controller: nameController,
+                          controller: phoneController,
                           textInputType: TextInputType.phone,
                           maxLength: 10,
                           cursorColor: CustomColors.colorWhite,
@@ -193,7 +199,7 @@ class ProfileState extends State<Profile> {
 
                             });
                           },
-                          controller: nameController,
+                          controller: companyController,
                           textInputType: TextInputType.text,
                           maxLength: 100,
                           cursorColor: CustomColors.colorWhite,
@@ -218,7 +224,7 @@ class ProfileState extends State<Profile> {
 
                             });
                           },
-                          controller: nameController,
+                          controller: countryController,
                           textInputType: TextInputType.text,
                           maxLength: 100,
                           cursorColor: CustomColors.colorWhite,

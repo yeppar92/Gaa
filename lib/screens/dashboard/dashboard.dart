@@ -8,6 +8,7 @@ import 'package:daa/common/common.dart';
 import 'package:daa/common/custom_strings.dart';
 import 'package:daa/models/all_courses_model.dart';
 import 'package:daa/screens/dashboard/dashboard_view_model.dart';
+import 'package:daa/screens/fragments/main_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,7 +45,7 @@ class DashState extends State<Dashboard> {
 
   final pages = [
     WithoutSign(),
-    const Profile(),
+    const MainScreen(),
     const Profile()
     //HomeWork(streamController1.stream),
   ];
@@ -805,7 +806,7 @@ class WithoutSignState extends State<WithoutSign> {
                 TextButton(
                   onPressed: () {
                     if (singInTitle == Customstrings.signin) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) => const Login1()));
                     } else {
                       showLogoutDialog(context);
@@ -896,7 +897,7 @@ class WithoutSignState extends State<WithoutSign> {
                                   alignment: Alignment.topLeft,
                                   child: TextWidget(
                                       text:
-                                          'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                          Customstrings.courseSubtitle,
                                       txtColor: Common.txtColor,
                                       fontFamily: "PoppinRegular",
                                       fontSize: 16.0,

@@ -1,7 +1,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:daa/common/custom_strings.dart';
-import 'package:daa/screens/forgot_pass.dart';
+import 'package:daa/screens/forgotpass/forgot_pass.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/gestures.dart';
