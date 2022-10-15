@@ -279,6 +279,7 @@ class LoginState extends State<Login1> {
                                             text: Customstrings.signin,
                                             height: 50.0,
                                             width: double.infinity,
+                                            fontSize: 18.0,
                                             circularSize: 30.0)),
                                   ],
                                 )),

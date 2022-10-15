@@ -147,6 +147,8 @@ class DashState extends State<Dashboard> {
                                 onTap: (value) {
                                   setState(() {
                                     pageIndex = value;
+                                    courseVisible = true;
+                                    subCourseVisible = false;
                                    // pageIndex = 0;
                                   });
                                 },

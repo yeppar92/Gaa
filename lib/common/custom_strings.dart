@@ -57,6 +57,10 @@ class Customstrings {
   static const String appType = "Application Type";
   static const String lastEvalutionScore = "Last Evalution Score";
   static const String certificate = "Certificate";
+  static const String purchaseCourse = "Purchase Courses";
+  static const String raiseTicket = "Raise Ticket";
+  static const String ticketStatus = "Ticket Status";
+  static const String support = "Support";
 
 
 

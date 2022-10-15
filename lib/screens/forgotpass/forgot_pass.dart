@@ -157,6 +157,7 @@ class ForgotState extends State<Forgotpass> {
                                       text: Customstrings.conti,
                                       height: 50.0,
                                       width: double.infinity,
+                                      fontSize: 18.0,
                                       circularSize: 30.0)),
                             ],
                           ),

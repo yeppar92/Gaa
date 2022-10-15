@@ -188,6 +188,7 @@ class VerificationState extends State<Verification> {
                                   text: Customstrings.verify_otp,
                                   height: 50.0,
                                   width: double.infinity,
+                                  fontSize: 18.0,
                                   circularSize: 30.0)
                             ),
                           ],

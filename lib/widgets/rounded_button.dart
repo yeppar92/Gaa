@@ -9,6 +9,7 @@ class RoundedButton extends StatelessWidget{
  final String text;
  final double height;
  final double width;
+  final double fontSize;
  final double circularSize;
 
    const RoundedButton({super.key,
@@ -20,6 +21,7 @@ class RoundedButton extends StatelessWidget{
        required this.text,
        required this.height,
        required this.width,
+       required this.fontSize,
        required this.circularSize});
 
   @override
@@ -51,9 +53,9 @@ class RoundedButton extends StatelessWidget{
        },
       child: Text(
        text,
-       style: const TextStyle(
+       style:  TextStyle(
            color: Colors.white,
-           fontSize: 18,
+           fontSize: fontSize,
            fontFamily: 'PoppinMedium'),
       ),
      ),

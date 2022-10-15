@@ -34,7 +34,7 @@ class ApiServices {
 
   // for modules api
   Future<SubModulesModel> getModules(String token) async {
-    var url = Uri.parse('${Common.mainurl}modules');
+    var url = Uri.parse('${Common.mainurl}allmodules');
     print(url);
     print("token is = $token");
     Response moduleData = await _dio.post(url.toString(),options: Options(headers: {"Content-Type":"application/json","Accept":"application/json","authorization":"Bearer $token"}));
