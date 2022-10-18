@@ -89,10 +89,8 @@ class LoginState extends State<Login1> {
                 automaticallyImplyLeading: false,
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
-                actions: <Widget>[
-
-
-                   Padding(padding: EdgeInsets.only(right: 10),
+               /* actions: <Widget>[
+                  Padding(padding: EdgeInsets.only(right: 10),
                    child:   IconButton(
                      icon: Image.asset(
                          'assets/images/cross.png',
@@ -106,7 +104,7 @@ class LoginState extends State<Login1> {
                    ),
                    )
 
-                ],
+                ],*/
 
               ),
 
@@ -143,9 +141,22 @@ class LoginState extends State<Login1> {
                                         topLeft: Radius.circular(50.0))),
                                 child: Column(
                                   children: [
-                                    const SizedBox(
-                                      height: 10,
+
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child:  IconButton(
+                                        icon: Image.asset(
+                                          'assets/images/cross.png',
+                                          height: 30,
+                                          width: 30,
+                                          color: CustomColors.colorHeader,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
                                     ),
+
                                     TextWidget(
                                         text: Customstrings.signin,
                                         txtColor: CustomColors.colorHeader,

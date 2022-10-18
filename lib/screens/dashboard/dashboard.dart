@@ -146,11 +146,20 @@ class DashState extends State<Dashboard> {
                                 unselectedLabelStyle: textTheme.caption,
                                 onTap: (value) {
                                   setState(() {
-                                    pageIndex = value;
-                                    courseVisible = true;
-                                    subCourseVisible = false;
-                                   // pageIndex = 0;
+                                    if(value == 0){
+                                      pageIndex = value;
+                                    }else{
+                                      if (singInTitle != Customstrings.signin) {
+                                        pageIndex = value;
+                                        courseVisible = true;
+                                        subCourseVisible = false;
+                                      } else {
+                                        Common.showToast(
+                                            'You have to log in.Please login first', 'red');
+                                      }
+                                    }
                                   });
+
                                 },
                                 items: const [
                                   BottomNavigationBarItem(
@@ -305,9 +314,9 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
                                                   Colors.black.withOpacity(.30),
                                               height: 30,
                                               width: double.infinity,
-                                              child: Text(
+                                              child: const Text(
                                                 Customstrings.grtraining,
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                     color: Colors.white),
                                               ),
                                             ),
@@ -919,7 +928,7 @@ class WithoutSignState extends State<WithoutSign> {
                                 ),
                               ],
                             )),
-                        SizedBox(
+                        Container(
                             height: 280,
                             width: double.infinity,
                             child: getCourseList())
@@ -927,8 +936,7 @@ class WithoutSignState extends State<WithoutSign> {
                     )),
                 Visibility(
                     visible: subCourseVisible,
-                    child: SizedBox(
-                        height: MediaQuery.of(context).size.height,
+                    child: Container(
                         child: getModuleList())),
               ],
             )))));
@@ -941,17 +949,23 @@ class WithoutSignState extends State<WithoutSign> {
       scrollDirection: Axis.horizontal,
       itemCount: courseList?.length ?? 0,
       itemBuilder: (context, position) {
+        var courseTitle = "Coming Soon";
+        if(courseList![position].status == 1){
+        courseTitle = courseList![position].title.toString();
+        }
         return Container(
           width: 300,
           padding: EdgeInsets.all(10),
           child: InkWell(
               onTap: () {
                 print(singInTitle);
-                if (singInTitle != Customstrings.signin) {
-                  callModulesApi();
-                } else {
-                  Common.showToast(
-                      'You have to log in.Please login first', 'red');
+                if(courseList![position].status == 1) {
+                  if (singInTitle != Customstrings.signin) {
+                    callModulesApi();
+                  } else {
+                    Common.showToast(
+                        'You have to log in.Please login first', 'red');
+                  }
                 }
               },
               child: SizedBox(
@@ -1003,7 +1017,7 @@ class WithoutSignState extends State<WithoutSign> {
                                     height: 30,
                                     width: double.infinity,
                                     child: Text(
-                                      courseList![position].title.toString(),
+                                    courseTitle,
                                       style:
                                           const TextStyle(color: Colors.white),
                                     ),
@@ -1048,22 +1062,29 @@ class WithoutSignState extends State<WithoutSign> {
     return GridView.builder(
       primary: true,
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const ScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, mainAxisSpacing: 5, crossAxisSpacing: 5),
       itemCount: moduleList?.length ?? 0,
       itemBuilder: (context, position) {
+        var moduleTitle = "Coming Soon";
+        if(moduleList![position].status == 1){
+          moduleTitle = moduleList![position].title.toString();
+        }
         return Material(
             color: Colors.transparent,
             child: InkWell(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => ModuleDetail(
-                        moduleList![position].content.toString(),
-                        moduleList![position].title.toString(),
-                        moduleList![position].mobilevr.toString(),
-                        moduleList![position].ar.toString(),
-                        baseUrl)));
+    if(moduleList![position].status == 1) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) =>
+              ModuleDetail(
+                  moduleList![position].appContent.toString(),
+                  moduleList![position].title.toString(),
+                  moduleList![position].mobilevr.toString(),
+                  moduleList![position].ar.toString(),
+                  baseUrl)));
+    }
               },
               child: SizedBox(
                 height: 120,
@@ -1100,7 +1121,7 @@ class WithoutSignState extends State<WithoutSign> {
                           height: 30,
                           width: double.infinity,
                           child: Text(
-                            moduleList![position].title.toString(),
+                            moduleTitle,
                             style: const TextStyle(color: Colors.white),
                           ),
                         ),

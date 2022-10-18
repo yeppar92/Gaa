@@ -11,7 +11,7 @@ class Customstrings {
   static String comingsoon = "Coming Soon";
   static const String appname = "GAA";
   static String marshal = "Marshalling";
-  static String signin = "Sign In";
+  static String signin = "Log In";
   static String loggedin = "Logged In";
   static String verification = "Verificatoin";
   static String conti = "Continue";

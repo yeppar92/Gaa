@@ -43,6 +43,7 @@ class Data {
   String? vrName;
   String? mobilevrName;
   String? content;
+  String? appContent;
   String? about;
   int? categoryId;
   int? orderNo;
@@ -65,6 +66,7 @@ class Data {
       this.vrName,
       this.mobilevrName,
       this.content,
+        this.appContent,
       this.about,
       this.categoryId,
       this.orderNo,
@@ -87,6 +89,7 @@ class Data {
     vrName = json['vr_name'];
     mobilevrName = json['mobilevr_name'];
     content = json['content'];
+    appContent = json['app_content'];
     about = json['about'];
     categoryId = json['category_id'];
     orderNo = json['order_no'];
@@ -111,6 +114,7 @@ class Data {
     data['vr_name'] = vrName;
     data['mobilevr_name'] = mobilevrName;
     data['content'] = content;
+    data['app_content'] = appContent;
     data['about'] = about;
     data['category_id'] = categoryId;
     data['order_no'] = orderNo;

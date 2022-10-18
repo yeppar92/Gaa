@@ -33,11 +33,21 @@ class ApiServices {
   }
 
   // for modules api
-  Future<SubModulesModel> getModules(String token) async {
+ /* Future<SubModulesModel> getModules(String token) async {
     var url = Uri.parse('${Common.mainurl}allmodules');
     print(url);
     print("token is = $token");
     Response moduleData = await _dio.post(url.toString(),options: Options(headers: {"Content-Type":"application/json","Accept":"application/json","authorization":"Bearer $token"}));
+    print('modules Info: ${moduleData.data}');
+    SubModulesModel subModulesModel = SubModulesModel.fromJson(moduleData.data);
+    return subModulesModel;
+  }*/
+
+  Future<SubModulesModel> getModules(String token) async {
+    var url = Uri.parse('${Common.mainurl}allmodules');
+    print(url);
+    print("token is = $token");
+    Response moduleData = await _dio.get(url.toString());
     print('modules Info: ${moduleData.data}');
     SubModulesModel subModulesModel = SubModulesModel.fromJson(moduleData.data);
     return subModulesModel;
