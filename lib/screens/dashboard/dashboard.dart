@@ -653,14 +653,15 @@ class WithoutSign extends StatefulWidget {
 }
 
 class WithoutSignState extends State<WithoutSign> {
-  List<CourseData>? courseList;
+ // List<CourseData>? courseList;
+  List<Data>? courseList;
   List<Data>? moduleList;
   List<String> imageList = [
-    'assets/images/rectone.png',
-    'assets/images/recttwo.png',
-    'assets/images/rectthree.png',
-    'assets/images/rectfour.png',
-    'assets/images/rectfive.png',
+    'assets/images/groundtrain.jpg',
+    'assets/images/pilot.jpg',
+    'assets/images/cabincrew.jpg',
+    'assets/images/traficcontrol.jpg',
+    'assets/images/aircraft.jpg',
     'assets/images/rectsix.png',
     'assets/images/subrectone.png',
     'assets/images/rectone.png',
@@ -688,11 +689,24 @@ class WithoutSignState extends State<WithoutSign> {
     callCoursesApi();
   }
 
-  callCoursesApi() {
+ /* callCoursesApi() {
     dashboardViewModel.fetchAllCoursesData(context).then((value) {
       if (value.status.toString() == "true") {
         setState(() {
           courseList = value.courseData;
+          baseUrl = value.baseUrl.toString();
+        });
+      } else {
+        Common.showToast("something went wrong", "red");
+      }
+    });
+  }*/
+
+  callCoursesApi() {
+    dashboardViewModel.fetchModuleData(context, authToken).then((value) {
+      if (value.status.toString() == "true") {
+        setState(() {
+          courseList = value.data;
           baseUrl = value.baseUrl.toString();
         });
       } else {
@@ -856,7 +870,7 @@ class WithoutSignState extends State<WithoutSign> {
                                 borderRadius: BorderRadius.circular(8.0),
                                 image: const DecorationImage(
                                   image: AssetImage(
-                                      "assets/images/subrectone.png"),
+                                      "assets/images/bannerone.jpg"),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -867,7 +881,29 @@ class WithoutSignState extends State<WithoutSign> {
                                 borderRadius: BorderRadius.circular(8.0),
                                 image: const DecorationImage(
                                   image:
-                                      AssetImage("assets/images/recttwo.png"),
+                                      AssetImage("assets/images/bannertwo.jpg"),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.all(6.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                image: const DecorationImage(
+                                  image:
+                                  AssetImage("assets/images/bannerthree.jpg"),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.all(6.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                image: const DecorationImage(
+                                  image:
+                                  AssetImage("assets/images/bannerfour.png"),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -920,7 +956,7 @@ class WithoutSignState extends State<WithoutSign> {
                                 Align(
                                   alignment: Alignment.topLeft,
                                   child: TextWidget(
-                                      text: 'Our Courses : ',
+                                      text: "${Customstrings.grtraining} : ",
                                       txtColor: Common.txtColor,
                                       fontFamily: "PoppinBold",
                                       fontSize: 20.0,
@@ -928,10 +964,86 @@ class WithoutSignState extends State<WithoutSign> {
                                 ),
                               ],
                             )),
-                        Container(
+                          SizedBox(
                             height: 280,
                             width: double.infinity,
-                            child: getCourseList())
+                            child: getCourseList()),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                          Container(
+                           padding: const EdgeInsets.only(left: 10),
+                          alignment: Alignment.topLeft,
+                          child: const TextWidget(
+                              text: "${Customstrings.pilot} : ",
+                              txtColor: Common.txtColor,
+                              fontFamily: "PoppinBold",
+                              fontSize: 20.0,
+                              textAlign: TextAlign.left),
+                        ),
+                        SizedBox(
+                            height: 200,
+                            width: double.infinity,
+                            child: getpilot()),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          alignment: Alignment.topLeft,
+                          child: const TextWidget(
+                              text: "${Customstrings.cabinCrew} : ",
+                              txtColor: Common.txtColor,
+                              fontFamily: "PoppinBold",
+                              fontSize: 20.0,
+                              textAlign: TextAlign.left),
+                        ),
+                        SizedBox(
+                            height: 200,
+                            width: double.infinity,
+                            child: getCabinCrew()),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          alignment: Alignment.topLeft,
+                          child: const TextWidget(
+                              text: "${Customstrings.airTrafic} : ",
+                              txtColor: Common.txtColor,
+                              fontFamily: "PoppinBold",
+                              fontSize: 20.0,
+                              textAlign: TextAlign.left),
+                        ),
+                        SizedBox(
+                            height: 200,
+                            width: double.infinity,
+                            child: getAirTraffic()),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          alignment: Alignment.topLeft,
+                          child: const TextWidget(
+                              text: "${Customstrings.airEngineer} : ",
+                              txtColor: Common.txtColor,
+                              fontFamily: "PoppinBold",
+                              fontSize: 20.0,
+                              textAlign: TextAlign.left),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 70),
+                            height: 200,
+                            width: double.infinity,
+                            child: getAirCraft()),
+
+
+
+
                       ],
                     )),
                 Visibility(
@@ -949,9 +1061,14 @@ class WithoutSignState extends State<WithoutSign> {
       scrollDirection: Axis.horizontal,
       itemCount: courseList?.length ?? 0,
       itemBuilder: (context, position) {
-        var courseTitle = "Coming Soon";
+        var courseTitle = "Coming Soon", subString = "";
         if(courseList![position].status == 1){
         courseTitle = courseList![position].title.toString();
+        if(courseList![position].appContent!.isNotEmpty){
+          if(courseList![position].appContent!.length >= 100) {
+            subString = courseList![position].appContent!.substring(0, 100);
+          }
+        }
         }
         return Container(
           width: 300,
@@ -959,14 +1076,14 @@ class WithoutSignState extends State<WithoutSign> {
           child: InkWell(
               onTap: () {
                 print(singInTitle);
-                if(courseList![position].status == 1) {
-                  if (singInTitle != Customstrings.signin) {
-                    callModulesApi();
-                  } else {
-                    Common.showToast(
-                        'You have to log in.Please login first', 'red');
-                  }
-                }
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ModuleDetail(
+                            courseList![position].appContent.toString(),
+                            courseList![position].title.toString(),
+                            courseList![position].mobilevr.toString(),
+                            courseList![position].ar.toString(),
+                            baseUrl)));
               },
               child: SizedBox(
                   height: double.infinity,
@@ -984,8 +1101,16 @@ class WithoutSignState extends State<WithoutSign> {
                               elevation: 5,
                               child: Stack(children: [
                                 Container(
-                                  child: Image.asset(
+                                  child: /*Image.asset(
                                     imageList[position],
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    fit: BoxFit.fill,
+                                  )*/
+                                  CachedNetworkImage(
+                                    imageUrl: "$baseUrl/${courseList![position].image}",
+                                    errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                                     height: double.infinity,
                                     width: double.infinity,
                                     fit: BoxFit.fill,
@@ -1042,15 +1167,289 @@ class WithoutSignState extends State<WithoutSign> {
                       Container(
                         margin: const EdgeInsets.only(left: 5),
                         child: TextWidget(
-                            text: courseList![position]
-                                .description
-                                .toString()
-                                .substring(0, 100),
+                            text: subString,
                             txtColor: Common.txtColor,
                             fontFamily: "PoppinRegular",
                             fontSize: 10.0,
                             textAlign: TextAlign.left),
                       ),
+                    ],
+                  ))),
+        );
+      },
+    );
+  }
+
+  Widget getpilot() {
+    return ListView.builder(
+      shrinkWrap: true,
+      cacheExtent: 10000,
+      scrollDirection: Axis.horizontal,
+      itemCount: 1,
+      itemBuilder: (context, position) {
+        return Container(
+          width: 300,
+          padding: const EdgeInsets.all(10),
+          child: InkWell(
+              onTap: () {
+
+
+              },
+              child: SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Expanded(
+                          child: Card(
+                              color: Colors.white,
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              elevation: 5,
+                              child: Stack(children: [
+                                Image.asset(
+                                  imageList[1],
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                )
+
+                                /* CachedNetworkImage(
+                                  imageUrl: "$baseUrl/${courseList![position].image}",
+
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                )*/
+                                ,
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.black.withOpacity(.30),
+                                    height: 30,
+                                    width: double.infinity,
+                                    child: Text(
+                                      Customstrings.comingsoon,
+                                      style:
+                                      const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ]))),
+
+
+                    ],
+                  ))),
+        );
+      },
+    );
+  }
+
+  Widget getCabinCrew() {
+    return ListView.builder(
+      shrinkWrap: true,
+      cacheExtent: 10000,
+      scrollDirection: Axis.horizontal,
+      itemCount: 1,
+      itemBuilder: (context, position) {
+        return Container(
+          width: 300,
+          padding: const EdgeInsets.all(10),
+          child: InkWell(
+              onTap: () {
+
+              },
+              child: SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Expanded(
+                          child: Card(
+                              color: Colors.white,
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              elevation: 5,
+                              child: Stack(children: [
+                                Image.asset(
+                                  imageList[2],
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                )
+
+                                /* CachedNetworkImage(
+                                  imageUrl: "$baseUrl/${courseList![position].image}",
+
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                )*/
+                                ,
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.black.withOpacity(.30),
+                                    height: 30,
+                                    width: double.infinity,
+                                    child: Text(
+                                      Customstrings.comingsoon,
+                                      style:
+                                      const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ]))),
+
+
+                    ],
+                  ))),
+        );
+      },
+    );
+  }
+
+  Widget getAirTraffic() {
+    return ListView.builder(
+      shrinkWrap: true,
+      cacheExtent: 10000,
+      scrollDirection: Axis.horizontal,
+      itemCount: 1,
+      itemBuilder: (context, position) {
+        return Container(
+          width: 300,
+          padding: const EdgeInsets.all(10),
+          child: InkWell(
+              onTap: () {
+
+              },
+              child: SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Expanded(
+                          child: Card(
+                              color: Colors.white,
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              elevation: 5,
+                              child: Stack(children: [
+                                Image.asset(
+                                  imageList[3],
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                )
+
+                                /* CachedNetworkImage(
+                                  imageUrl: "$baseUrl/${courseList![position].image}",
+
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                )*/
+                                ,
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.black.withOpacity(.30),
+                                    height: 30,
+                                    width: double.infinity,
+                                    child: Text(
+                                      Customstrings.comingsoon,
+                                      style:
+                                      const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ]))),
+
+
+                    ],
+                  ))),
+        );
+      },
+    );
+  }
+
+  Widget getAirCraft() {
+    return ListView.builder(
+      shrinkWrap: true,
+      cacheExtent: 10000,
+      scrollDirection: Axis.horizontal,
+      itemCount: 1,
+      itemBuilder: (context, position) {
+        return Container(
+          width: 300,
+          padding: const EdgeInsets.all(10),
+          child: InkWell(
+              onTap: () {
+
+              },
+              child: SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Expanded(
+                          child: Card(
+                              color: Colors.white,
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              elevation: 5,
+                              child: Stack(children: [
+                                Image.asset(
+                                  imageList[4],
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                )
+
+                                /* CachedNetworkImage(
+                                  imageUrl: "$baseUrl/${courseList![position].image}",
+
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.fill,
+                                )*/
+                                ,
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.black.withOpacity(.30),
+                                    height: 30,
+                                    width: double.infinity,
+                                    child: Text(
+                                      Customstrings.comingsoon,
+                                      style:
+                                      const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ]))),
+
+
                     ],
                   ))),
         );

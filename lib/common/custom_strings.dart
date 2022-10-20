@@ -61,6 +61,20 @@ class Customstrings {
   static const String raiseTicket = "Raise Ticket";
   static const String ticketStatus = "Ticket Status";
   static const String support = "Support";
+  static const String ourCourses = "Our Courses";
+  static const String pilot = "Pilot";
+  static const String cabinCrew = "Cabin Crew";
+  static const String airTrafic = "Air Traffic Control";
+  static const String airEngineer = "Aircraft Engineering";
+  static const String aviationSecurity = "Aviation Security";
+  static const String airportOperation = "Airport Operations";
+  static const String mariTime = "Maritime";
+  static const String leaderManagment = "Leadership & Management";
+  static const String highEducation = "Higher Education";
+
+
+
+
 
 
 

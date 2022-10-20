@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ars_progress_dialog/dialog.dart';
@@ -72,6 +73,19 @@ class Common {
     String check = "";
     if (value != "null") {
       check = value;
+    }
+    return check;
+  }
+
+  static fileExistOrNot(String path) async {
+    var check = false;
+    var dir = await DownloadsPathProvider.downloadsDirectory;
+    var downloadFolder = "${dir!.path}/$path";
+    print(downloadFolder);
+    if (await File(downloadFolder).exists()) {
+     check = true;
+    } else {
+    check = false;
     }
     return check;
   }
