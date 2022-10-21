@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:daa/screens/%20login/login.dart';
 import 'package:daa/screens/dashboard/dashboard.dart';
 import 'package:daa/screens/forgotpass/forgot_pass.dart';
-import 'package:daa/screens/fragments/main_screen.dart';
+import 'package:daa/screens/fragments/mainscreen/main_screen.dart';
 import 'package:daa/screens/profile_setting.dart';
 
 import 'package:daa/screens/reset_pass.dart';

@@ -1,12 +1,13 @@
 import 'package:daa/common/custom_colors.dart';
+import 'package:daa/screens/fragments/mainscreen/mainscreen_view_model.dart';
 import 'package:daa/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:daa/widgets/text_widget.dart';
-import '../../common/common.dart';
-import '../../common/custom_strings.dart';
-import '../../widgets/rounded_button.dart';
-import '../../widgets/text_field_widget.dart';
+import '../../../common/common.dart';
+import '../../../common/custom_strings.dart';
+import '../../../widgets/rounded_button.dart';
+import '../../../widgets/text_field_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,17 +17,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class MainScreenState extends State<MainScreen> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController companyController = TextEditingController();
-  TextEditingController countryController = TextEditingController();
+
   var cardColor1 = CustomColors.cardColor1.withOpacity(.90);
   var cardColor2 = CustomColors.cardColor2.withOpacity(.90);
   var cardColor3 = CustomColors.cardColor3.withOpacity(.90);
   var sideBarVisible = true;
   var leftMargin = 0.0,topMargin = 170.0;
   var visibleCount = 0,miliSeconds = 0;
+  MainScreenViewModel mainScreenViewModel = MainScreenViewModel();
+  var assignedCourses = "0",assignedModules = "0",trainingAttempts = "",evalutaionAttempts = "0";
   @override
   void initState() {
     super.initState();
@@ -36,12 +35,29 @@ class MainScreenState extends State<MainScreen> {
   @override
   void dispose() {
     super.dispose();
+    mainScreenViewModel.dispose();
 
   }
 
   checkForPref() async {
+    String token = await Common.getPreferences("token");
+   callReportApi(token);
 
-  }
+   }
+
+   callReportApi(String authToken){
+     mainScreenViewModel.fetchDashReportData(context, authToken).then((value) {
+       if (value.status.toString() == "true") {
+         setState(() {
+          assignedCourses = value.courses.toString();
+          assignedModules = value.modules.toString();
+          trainingAttempts = value.trainingAttempts.toString();
+         });
+       } else {
+         Common.showToast("something went wrong", "red");
+       }
+     });
+   }
 
 
   @override
@@ -205,7 +221,7 @@ class MainScreenState extends State<MainScreen> {
                                               image: AssetImage("assets/images/blueeclipse.png"),
                                               fit: BoxFit.cover),
                                         ),
-                                        child: const TextWidget(text: '1',
+                                        child:  TextWidget(text: assignedCourses,
                                             txtColor: CustomColors.colorWhite,
                                             fontFamily: 'PoppinMedium',
                                             fontSize: 40.0,
@@ -222,7 +238,7 @@ class MainScreenState extends State<MainScreen> {
                                             image: AssetImage("assets/images/greeneclipse.png"),
                                             fit: BoxFit.cover),
                                       ),
-                                      child: const TextWidget(text: '5',
+                                      child:  TextWidget(text: assignedModules,
                                           txtColor: CustomColors.colorWhite,
                                           fontFamily: 'PoppinMedium',
                                           fontSize: 40.0,
@@ -260,7 +276,7 @@ class MainScreenState extends State<MainScreen> {
                                               image: AssetImage("assets/images/yelloweclipse.png"),
                                               fit: BoxFit.cover),
                                         ),
-                                        child: const TextWidget(text: '11',
+                                        child:  TextWidget(text: trainingAttempts,
                                             txtColor: CustomColors.colorWhite,
                                             fontFamily: 'PoppinMedium',
                                             fontSize: 40.0,
@@ -277,7 +293,7 @@ class MainScreenState extends State<MainScreen> {
                                             image: AssetImage("assets/images/redeclipse.png"),
                                             fit: BoxFit.cover),
                                       ),
-                                      child: const TextWidget(text: '59',
+                                      child:  TextWidget(text: evalutaionAttempts,
                                           txtColor: CustomColors.colorWhite,
                                           fontFamily: 'PoppinMedium',
                                           fontSize: 40.0,

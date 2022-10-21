@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:daa/common/custom_strings.dart';
 import 'package:daa/screens/forgotpass/forgot_pass.dart';
+import 'package:device_apps/device_apps.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/gestures.dart';
@@ -17,9 +19,9 @@ import '../common/common.dart';
 import 'dashboard/dashboard.dart';
 
 class ModuleDetail extends StatefulWidget {
-  var content = "", title = "", mobileVr = "", mobileAr = "", baseUrl = "";
+  var content = "", title = "", mobileVr = "", mobileAr = "", baseUrl = "",arPkgName = "",vrPkgName = "";
   ModuleDetail(
-      this.content, this.title, this.mobileVr, this.mobileAr, this.baseUrl);
+      this.content, this.title, this.mobileVr, this.mobileAr, this.baseUrl,this.arPkgName,this.vrPkgName, {super.key});
 
   @override
   ModuleState createState() => ModuleState();
@@ -279,9 +281,14 @@ class ModuleState extends State<ModuleDetail> {
                                 widget.mobileVr != "null") {
                               if (await Common.fileExistOrNot(
                                   widget.mobileVr)) {
-                                Common.showToast(
-                                    'File already downloaded.Please check in download folder',
-                                    'green');
+                                bool isInstalled = await DeviceApps.isAppInstalled(widget.vrPkgName);
+                                if(isInstalled){
+                                  DeviceApps.openApp(widget.vrPkgName);
+                                }else {
+                                  Common.showToast(
+                                      'File already downloaded please install it from download folder',
+                                      'green');
+                                }
                               } else {
                                 checkForDownload = false;
                                 downloadDialog(widget.mobileVr);
@@ -291,6 +298,7 @@ class ModuleState extends State<ModuleDetail> {
                             } else {
                               Common.showToast(
                                   "Mobile VR is not avaialble.", "red");
+
                             }
                           },
                           icon: const Icon(
@@ -319,9 +327,14 @@ class ModuleState extends State<ModuleDetail> {
                                 widget.mobileAr != "null") {
                               if (await Common.fileExistOrNot(
                                   widget.mobileAr)) {
-                                Common.showToast(
-                                    'File already downloaded.Please check in download folder',
-                                    'green');
+                                bool isInstalled = await DeviceApps.isAppInstalled(widget.arPkgName);
+                                if(isInstalled){
+                                  DeviceApps.openApp(widget.arPkgName);
+                                }else {
+                                  Common.showToast(
+                                      'File already downloaded please install it from download folder',
+                                      'green');
+                                }
                               } else {
                                 checkForDownload = false;
                                 downloadDialog(widget.mobileAr);

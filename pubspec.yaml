@@ -35,6 +35,8 @@ dependencies:
   cached_network_image: ^3.2.2
   sqflite: ^2.1.0
   path: ^1.8.2
+  android_intent_plus: ^3.1.5
+  device_apps: ^2.2.0
 
   # The following adds the Cupertino Icons fonts to your application.
   # Use with the CupertinoIcons class for iOS style icons.

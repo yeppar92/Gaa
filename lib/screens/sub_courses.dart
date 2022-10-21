@@ -259,7 +259,7 @@ class SubCourseState extends State<Subcourses> {
                     onTap: ()  {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (BuildContext context) => ModuleDetail(moduleList![position].content.toString(),
-                              moduleList![position].title.toString(),moduleList![position].mobilevr.toString(),moduleList![position].ar.toString(),imageUrl)));
+                              moduleList![position].title.toString(),moduleList![position].mobilevr.toString(),moduleList![position].ar.toString(),imageUrl,"","")));
                      /* if(moduleList![position].mobilevr.toString().isNotEmpty && moduleList![position].mobilevr != null) {
                         checkForDownload = false;
                         downloadDialog(

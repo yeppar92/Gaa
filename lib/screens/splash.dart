@@ -46,20 +46,20 @@ class _SplashState extends State<Splash>{
         const Duration(seconds: 5),
             () {
 
-            /*  if (checkLogin == "true") {
+              if (checkLogin == "true") {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => Dashboard(streamController,streamController.stream,userName)));
               } else {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => Dashboard(streamController,streamController.stream,Customstrings.signin)));
-              }*/
-          if (checkLogin == "true") {
+              }
+          /*if (checkLogin == "true") {
              Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => Dashboard(streamController,streamController.stream,"")));
           } else {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => const Login1()));
-          }
+          }*/
         }
     );
     

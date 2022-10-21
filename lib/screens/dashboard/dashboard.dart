@@ -8,7 +8,7 @@ import 'package:daa/common/common.dart';
 import 'package:daa/common/custom_strings.dart';
 import 'package:daa/models/all_courses_model.dart';
 import 'package:daa/screens/dashboard/dashboard_view_model.dart';
-import 'package:daa/screens/fragments/main_screen.dart';
+import 'package:daa/screens/fragments/mainscreen/main_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -595,7 +595,7 @@ class HomeState extends State<HomeWork> with SingleTickerProviderStateMixin {
                           moduleList![position].title.toString(),
                           moduleList![position].mobilevr.toString(),
                           moduleList![position].ar.toString(),
-                          baseUrl)));
+                          baseUrl,"","")));
                 },
                 child: SizedBox(
                   height: 120,
@@ -1076,14 +1076,23 @@ class WithoutSignState extends State<WithoutSign> {
           child: InkWell(
               onTap: () {
                 print(singInTitle);
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        ModuleDetail(
-                            courseList![position].appContent.toString(),
-                            courseList![position].title.toString(),
-                            courseList![position].mobilevr.toString(),
-                            courseList![position].ar.toString(),
-                            baseUrl)));
+                if (singInTitle != Customstrings.signin) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ModuleDetail(
+                              courseList![position].appContent.toString(),
+                              courseList![position].title.toString(),
+                              courseList![position].mobilevr.toString(),
+                              courseList![position].ar.toString(),
+                              baseUrl,
+                              courseList![position].arName.toString(),
+                              courseList![position].vrName.toString(),
+                             )));
+                } else {
+                  Common.showToast(
+                      'You have to log in.Please login first', 'red');
+                }
+
               },
               child: SizedBox(
                   height: double.infinity,
@@ -1482,7 +1491,7 @@ class WithoutSignState extends State<WithoutSign> {
                   moduleList![position].title.toString(),
                   moduleList![position].mobilevr.toString(),
                   moduleList![position].ar.toString(),
-                  baseUrl)));
+                  baseUrl,"","")));
     }
               },
               child: SizedBox(

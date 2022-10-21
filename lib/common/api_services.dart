@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:daa/common/common.dart';
 import 'package:daa/models/all_courses_model.dart';
 import 'package:daa/models/login_model.dart';
+import 'package:daa/models/report_model.dart';
 import 'package:daa/models/reset_pass_model.dart';
 import 'package:daa/models/sub_modules_model.dart';
 import 'package:dio/dio.dart';
@@ -72,6 +73,17 @@ class ApiServices {
     print('modules Info: ${moduleData.data}');
     ResetPassModel resetPassModel = ResetPassModel.fromJson(moduleData.data);
     return resetPassModel;
+  }
+
+   // for get dashboard report
+  Future<ReportModel> getReports(String token) async {
+    var url = Uri.parse('${Common.mainurl}report');
+    print(url);
+    print("token is = $token");
+    Response moduleData = await _dio.post(url.toString(),options: Options(headers: {"Content-Type":"application/json","Accept":"application/json","authorization":"Bearer $token"}));
+    print('modules Info: ${moduleData.data}');
+    ReportModel reportModel = ReportModel.fromJson(moduleData.data);
+    return reportModel;
   }
 
 
