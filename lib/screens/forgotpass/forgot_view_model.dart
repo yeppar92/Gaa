@@ -1,15 +1,10 @@
 import 'dart:async';
-
-import 'package:daa/common/api_services.dart';
-import 'package:daa/common/custom_strings.dart';
-import 'package:daa/models/login_model.dart';
-import 'package:daa/repository/common_repo.dart';
-import 'package:daa/screens/%20login/login_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/common.dart';
 import '../../models/reset_pass_model.dart';
+import '../../repository/common_repo.dart';
 import '../dashboard/dashboard.dart';
 
 class ForgotViewModel with ChangeNotifier {

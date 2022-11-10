@@ -1,11 +1,10 @@
-import 'package:daa/common/custom_colors.dart';
-import 'package:daa/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:daa/widgets/text_widget.dart';
 import '../../common/common.dart';
+import '../../common/custom_colors.dart';
 import '../../common/custom_strings.dart';
 import '../../widgets/text_field_widget.dart';
+import '../../widgets/text_widget.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

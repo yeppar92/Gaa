@@ -1,11 +1,8 @@
 
-
-import 'package:daa/models/all_courses_model.dart';
-import 'package:daa/models/login_model.dart';
-import 'package:daa/models/report_model.dart';
-import 'package:daa/models/reset_pass_model.dart';
-
 import '../../common/api_services.dart';
+import '../models/all_courses_model.dart';
+import '../models/report_model.dart';
+import '../models/reset_pass_model.dart';
 
 class CommonRepository {
 

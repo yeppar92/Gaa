@@ -1,10 +1,11 @@
-import 'package:daa/common/custom_strings.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../common/common.dart';
 import '../common/custom_colors.dart';
+import '../common/custom_strings.dart';
 import '../widgets/rounded_button.dart';
 import '../widgets/text_field_widget.dart';
 import '../widgets/text_widget.dart';

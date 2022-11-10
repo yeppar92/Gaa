@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:daa/common/custom_strings.dart';
-import 'package:daa/screens/forgotpass/forgot_pass.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
@@ -16,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../common/api_services.dart';
 import '../common/common.dart';
+import '../common/custom_strings.dart';
 import 'dashboard/dashboard.dart';
 
 class ModuleDetail extends StatefulWidget {

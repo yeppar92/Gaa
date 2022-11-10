@@ -4,21 +4,19 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:daa/common/common.dart';
-import 'package:daa/common/custom_strings.dart';
-import 'package:daa/models/all_courses_model.dart';
-import 'package:daa/screens/dashboard/dashboard_view_model.dart';
-import 'package:daa/screens/fragments/mainscreen/main_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../ login/login.dart';
 import '../../common/api_services.dart';
+import '../../common/common.dart';
+import '../../common/custom_strings.dart';
 import '../../models/sub_modules_model.dart';
 import '../../widgets/text_widget.dart';
+import '../fragments/mainscreen/main_screen.dart';
 import '../fragments/profile.dart';
 import '../module_detail.dart';
+import 'dashboard_view_model.dart';
 
 var courseVisible = true,
     subCourseVisible = false,
@@ -1099,7 +1097,9 @@ class WithoutSignState extends State<WithoutSign> {
                   width: double.infinity,
                   child: Column(
                     children: [
-                      Expanded(
+                      Container(
+                          width: double.infinity,
+                          height: 185,
                           child: Card(
                               color: Colors.white,
                               semanticContainer: true,

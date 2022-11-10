@@ -1,16 +1,8 @@
+// @dart=2.9
 import 'dart:async';
-
-import 'package:daa/screens/%20login/login.dart';
-import 'package:daa/screens/dashboard/dashboard.dart';
-import 'package:daa/screens/forgotpass/forgot_pass.dart';
-import 'package:daa/screens/fragments/mainscreen/main_screen.dart';
-import 'package:daa/screens/profile_setting.dart';
-
-import 'package:daa/screens/reset_pass.dart';
-import 'package:daa/screens/verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'splash.dart';
+import 'screens/splash.dart';
 
 
 
@@ -28,12 +20,12 @@ void main() async{
 class myApp extends StatelessWidget {
   StreamController<bool> streamController = StreamController<bool>();
 
-  myApp({super.key});
+  //myApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "DAA",
+        title: "GAA",
 
         theme: ThemeData(
           textSelectionTheme: const TextSelectionThemeData(

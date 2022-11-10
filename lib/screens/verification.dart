@@ -1,5 +1,3 @@
-import 'package:daa/common/custom_strings.dart';
-import 'package:daa/screens/%20login/login.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +5,7 @@ import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 
 import '../common/common.dart';
 import '../common/custom_colors.dart';
+import '../common/custom_strings.dart';
 import '../widgets/rounded_button.dart';
 import '../widgets/text_widget.dart';
 import 'dashboard/dashboard.dart';

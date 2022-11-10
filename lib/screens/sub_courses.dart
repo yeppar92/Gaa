@@ -1,8 +1,7 @@
 
 import 'dart:io';
+import 'package:Gaa/models/sub_modules_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:daa/models/sub_modules_model.dart';
-import 'package:daa/screens/module_detail.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/gestures.dart';
@@ -14,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../common/api_services.dart';
 import '../common/common.dart';
 import '../common/custom_strings.dart';
+import 'module_detail.dart';
 
 class Subcourses extends StatefulWidget {
   var title = "";

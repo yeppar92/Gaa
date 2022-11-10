@@ -1,14 +1,13 @@
-import 'package:daa/common/custom_colors.dart';
-import 'package:daa/models/report_model.dart';
-import 'package:daa/screens/fragments/mainscreen/mainscreen_view_model.dart';
-import 'package:daa/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:daa/widgets/text_widget.dart';
 import '../../../common/common.dart';
+import '../../../common/custom_colors.dart';
 import '../../../common/custom_strings.dart';
+import '../../../models/report_model.dart';
 import '../../../widgets/rounded_button.dart';
 import '../../../widgets/text_field_widget.dart';
+import '../../../widgets/text_widget.dart';
+import 'mainscreen_view_model.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

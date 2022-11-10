@@ -1,8 +1,9 @@
 
 
-import 'package:daa/models/login_model.dart';
+
 
 import '../../common/api_services.dart';
+import '../../models/login_model.dart';
 
 class LoginRepository {
 

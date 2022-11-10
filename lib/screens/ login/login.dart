@@ -1,12 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
-import 'package:daa/common/custom_colors.dart';
-import 'package:daa/common/custom_strings.dart';
-import 'package:daa/database/database_handler.dart';
-import 'package:daa/screens/%20login/login_view_model.dart';
-import 'package:daa/screens/forgotpass/forgot_pass.dart';
-import 'package:daa/widgets/text_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,9 +8,15 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../common/api_services.dart';
 import '../../common/common.dart';
+import '../../common/custom_colors.dart';
+import '../../common/custom_strings.dart';
+import '../../database/database_handler.dart';
 import '../../widgets/rounded_button.dart';
 import '../../widgets/text_field_widget.dart';
+import '../../widgets/text_widget.dart';
 import '../dashboard/dashboard.dart';
+import '../forgotpass/forgot_pass.dart';
+import 'login_view_model.dart';
 
 class Login1 extends StatefulWidget {
   const Login1({Key? key}) : super(key: key);

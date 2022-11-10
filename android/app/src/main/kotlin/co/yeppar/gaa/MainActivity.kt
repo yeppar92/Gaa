@@ -1,4 +1,4 @@
-package co.yeppar.daa
+package co.yeppar.gaa
 
 import io.flutter.embedding.android.FlutterActivity
 
