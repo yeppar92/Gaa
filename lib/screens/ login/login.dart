@@ -83,12 +83,11 @@ class LoginState extends State<Login1> {
             },
             child: Scaffold(
               extendBodyBehindAppBar: true,
-
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
-               /* actions: <Widget>[
+                /* actions: <Widget>[
                   Padding(padding: EdgeInsets.only(right: 10),
                    child:   IconButton(
                      icon: Image.asset(
@@ -104,9 +103,7 @@ class LoginState extends State<Login1> {
                    )
 
                 ],*/
-
               ),
-
               body: Container(
                   width: double.infinity,
                   height: double.infinity,
@@ -140,10 +137,9 @@ class LoginState extends State<Login1> {
                                         topLeft: Radius.circular(50.0))),
                                 child: Column(
                                   children: [
-
                                     Align(
                                       alignment: Alignment.topRight,
-                                      child:  IconButton(
+                                      child: IconButton(
                                         icon: Image.asset(
                                           'assets/images/cross.png',
                                           height: 30,
@@ -155,7 +151,6 @@ class LoginState extends State<Login1> {
                                         },
                                       ),
                                     ),
-
                                     TextWidget(
                                         text: Customstrings.signin,
                                         txtColor: CustomColors.colorHeader,
@@ -266,16 +261,15 @@ class LoginState extends State<Login1> {
                                                 await Permission.storage
                                                     .request();
                                               }
-                                              var status1 = await Permission
+                                             /* var status1 = await Permission
                                                   .manageExternalStorage.status;
                                               if (!status1.isGranted) {
                                                 await Permission
                                                     .manageExternalStorage
                                                     .request();
-                                              }
+                                              }*/
 
-                                              if (status.isGranted &&
-                                                  status1.isGranted) {
+                                              if (status.isGranted ) {
                                                 if (validate()) {
                                                   callSignInApi();
                                                 }

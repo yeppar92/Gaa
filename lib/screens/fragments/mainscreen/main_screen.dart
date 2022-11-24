@@ -151,7 +151,6 @@ class MainScreenState extends State<MainScreen> {
             },
             child : Scaffold(
                 extendBody: true,
-
                 appBar : AppBar(
                   automaticallyImplyLeading: false,
                   backgroundColor: Common.colorAccent,
@@ -176,7 +175,7 @@ class MainScreenState extends State<MainScreen> {
                     child : Stack(
                       children: <Widget>[
                         SingleChildScrollView(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.only(top: 10,left: 10,right: 10,bottom: 60),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [

@@ -114,12 +114,12 @@ class ModuleState extends State<ModuleDetail> {
                         ),
                         child: TextButton(
                           onPressed: () async {
-                            var status1 =
+                           /* var status1 =
                                 await Permission.manageExternalStorage.status;
                             if (!status1.isGranted) {
                               await Permission.manageExternalStorage.request();
-                            }
-                            if (!checkForDownload && status1.isGranted) {
+                            }*/
+                            if (!checkForDownload) {
                               if (apkName.isNotEmpty && apkName != null) {
                                 checkForDownload = true;
                                 var dir = await DownloadsPathProvider

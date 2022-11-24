@@ -68,7 +68,7 @@ class ProfileState extends State<Profile> {
                     ),
                     alignment: Alignment.center,
                     child : SingleChildScrollView(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.only(top: 10,left: 10,right: 10,bottom: 50),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
