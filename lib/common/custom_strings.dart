@@ -2,6 +2,9 @@ class Customstrings {
   static const String companyName = "Gulf Aviation Academy";
   static const String email = "Email Adress";
   static String pass = "Password";
+  static String ok = "OK";
+  static String downloaded = "Downloaded";
+  static String saveFile = "File is saved to download folder.You can install it from here";
   static String cpass = "Confirm Password";
   static String login = "Login";
   static String donthave =  "Don't have an account?";

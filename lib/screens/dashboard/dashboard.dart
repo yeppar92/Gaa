@@ -7,7 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../ login/login.dart';
+
 import '../../common/api_services.dart';
 import '../../common/common.dart';
 import '../../common/custom_strings.dart';
@@ -15,6 +15,7 @@ import '../../models/sub_modules_model.dart';
 import '../../widgets/text_widget.dart';
 import '../fragments/mainscreen/main_screen.dart';
 import '../fragments/profile.dart';
+import '../login/login.dart';
 import '../module_detail.dart';
 import 'dashboard_view_model.dart';
 

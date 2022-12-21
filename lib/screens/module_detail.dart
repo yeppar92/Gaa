@@ -15,6 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../common/api_services.dart';
 import '../common/common.dart';
 import '../common/custom_strings.dart';
+import '../widgets/text_widget.dart';
 import 'dashboard/dashboard.dart';
 
 class ModuleDetail extends StatefulWidget {
@@ -149,9 +150,10 @@ class ModuleState extends State<ModuleDetail> {
                                       }
                                     });
 
-                                    OpenFile.open(savePath);
+                                    //OpenFile.open(savePath);
                                     print("File is saved to download folder.");
                                     Navigator.of(context).pop();
+                                    showDownloadedDialog(savePath);
                                   } on DioError catch (e) {
                                     print(e.message);
                                   }
@@ -173,6 +175,53 @@ class ModuleState extends State<ModuleDetail> {
           });
         });
   }
+
+  showDownloadedDialog(String path) {
+    // set up the buttons
+
+    Widget continueButton = TextButton(
+      child:  TextWidget(
+          text: Customstrings.ok,
+          txtColor: Common.txtColor,
+          fontFamily: "PoppinMedium",
+          fontSize: 14.0,
+          textAlign: TextAlign.left),
+      onPressed:  () {
+        setState(() {
+          Navigator.of(context).pop();
+        });
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title:  TextWidget(
+          text: Customstrings.downloaded,
+          txtColor: Common.txtColor,
+          fontFamily: "PoppinBold",
+          fontSize: 16.0,
+          textAlign: TextAlign.left),
+      content:   TextWidget(
+          text: "${Customstrings.saveFile}\n $path",
+          txtColor: Common.txtColor,
+          fontFamily: "PoppinLight",
+          fontSize: 14.0,
+          textAlign: TextAlign.left),
+      actions: [
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
